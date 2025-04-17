@@ -48,10 +48,6 @@ export default function ViewCourses() {
                                         <span>{course.semester}</span>
                                     </div>
                                     <div className="flex justify-between">
-                                        <span className="font-medium text-gray-600">Course ID:</span>
-                                        <span>{course.id}</span>
-                                    </div>
-                                    <div className="flex justify-between">
                                         <span className="font-medium text-gray-600">Fee:</span>
                                         <span>৳ {course.fee}</span>
                                     </div>

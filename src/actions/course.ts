@@ -59,8 +59,6 @@ export async function deleteCourse(id: number) {
 export async function getAllCourse() {
     try {
         const courses = await prisma.course.findMany({
-            // orderBy: { createdAt: 'desc' } // optional sorting
-            // include: { students: true }, // if you want to include related students
         });
 
         if (courses.length === 0) {

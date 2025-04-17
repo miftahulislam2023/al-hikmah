@@ -3,13 +3,14 @@
 import { useFormStatus } from "react-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { getStudentByRoll } from "@/actions/student";
+import { searchStudentByRoll } from "@/actions/student";
 import { useActionState, useState } from "react";
 import Info from "./Info";
+import Link from "next/link";
 
 export default function SearchForm() {
     const { pending } = useFormStatus();
-    const [state, formAction] = useActionState(getStudentByRoll as any, null);
+    const [state, formAction] = useActionState(searchStudentByRoll as any, null);
     const [student, setStudent] = useState<any>(null);
 
     // sync response from server into state
@@ -46,7 +47,9 @@ export default function SearchForm() {
                     <Info label="Address" value={student.address} />
                     <Info label="Created At" value={new Date(student.createdAt).toLocaleString()} />
                     <Info label="Updated At" value={new Date(student.updatedAt).toLocaleString()} />
-
+                    <Link href={`/admin/students/${student.roll}`} className="sm:col-span-2">
+                        <Button>Update Profile</Button>
+                    </Link>
                     <div className="sm:col-span-2 mt-4">
                         <h3 className="font-semibold text-base mb-2">Courses</h3>
                         {student.courses.length > 0 ? (
