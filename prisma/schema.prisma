@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Student {
+  id                 Int       @id @default(autoincrement())
+  name               String?
+  email              String    @unique
+  phone              String?
+  password           String?
+  sscBatch           Int?
+  address            String?
+  dob                DateTime?
+  gender             Gender?
+  currentInstitute   String?
+  currentClass       Class
+  roll               String?
+  role               Role      @default(USER)
+  guardianName       String?
+  guardianPhone      String?
+  guardianOccupation String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  courses            Course[]  @relation("CourseToStudent")
+}
+
+model Course {
+  id        Int       @id @default(autoincrement())
+  semester  String
+  title     String
+  fee       Int
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  students  Student[] @relation("CourseToStudent")
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  email     String   @unique
+  password  String?
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Class {
+  SIX
+  SEVEN
+  EIGHT
+  NINE
+  TEN
+  ELEVEN
+  TWELVE
+  OTHER
+}
