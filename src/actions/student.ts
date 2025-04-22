@@ -1,5 +1,7 @@
 "use server"
 import prisma from "@/lib/prisma";
+import { Class, Gender, Student, StudentResponse } from "@/lib/types";
+import { Prisma } from "@prisma/client";
 
 function generateRollNumber(sscBatch: number, studentClass: string, studentId: number) {
     const classMapping: Record<string, string> = {
@@ -17,7 +19,7 @@ function generateRollNumber(sscBatch: number, studentClass: string, studentId: n
     return rollNumber;
 }
 
-export async function registerStudent(formData: FormData) {
+export async function registerStudent(formData: FormData): Promise<void> {
     const dobValue = formData.get("dob") as string | null;
     const dob = dobValue ? new Date(dobValue) : null;
 
@@ -27,9 +29,9 @@ export async function registerStudent(formData: FormData) {
         phone: formData.get("phone") as string | null,
         email: formData.get("email") as string,
         dob: dob ?? new Date(),
-        gender: formData.get("gender") as any,
+        gender: formData.get("gender") as Gender,
         currentInstitute: formData.get("currentInstitute") as string | null,
-        currentClass: formData.get("currentClass") as any,
+        currentClass: formData.get("currentClass") as Class,
         sscBatch: parseInt(formData.get("sscBatch") as string),
         guardianName: formData.get("guardianName") as string | null,
         guardianPhone: formData.get("guardianPhone") as string | null,
@@ -56,7 +58,7 @@ export async function registerStudent(formData: FormData) {
     }
 }
 
-export async function searchStudentByRoll(_: any, formData: FormData) {
+export async function searchStudentByRoll(_: FormData, formData: FormData): Promise<StudentResponse> {
     const roll = formData.get("roll") as string;
 
     if (!roll) return { error: "Roll number is required" };
@@ -70,15 +72,15 @@ export async function searchStudentByRoll(_: any, formData: FormData) {
 
         if (!student) return { error: "Student not found" };
 
-        const { password, ...safeStudent } = student;
-        return safeStudent;
-    } catch (error) {
-        console.error("Search error:", error); // ✅ Optional: Log for debugging
+        const { password: _password, ...safeStudent } = student;
+        return safeStudent as unknown as StudentResponse;
+    } catch (e) {
+        console.error("Search error:", e);
         return { error: "Internal server error" };
     }
 }
 
-export async function getStudentByRoll(roll: string) {
+export async function getStudentByRoll(roll: string): Promise<StudentResponse> {
     if (!roll) return { error: "Roll number is required" };
     const id = parseInt(roll.slice(-4));
     try {
@@ -88,29 +90,34 @@ export async function getStudentByRoll(roll: string) {
         });
 
         if (!student) return { error: "Student not found" };
-        return student;
-    } catch (error) {
+        return student as unknown as StudentResponse;
+    } catch (e) {
+        console.error("Error retrieving student:", e);
         return { error: "Internal server error" };
     }
 }
 
-export async function updateStudent(formData: FormData) {
+export async function updateStudent(formData: FormData): Promise<void> {
     try {
         const id = formData.get("id");
         if (!id) {
-            return { error: "Student ID is required" };
+            console.error("Student ID is required");
+            return;
         }
 
+        // Remove id from the update data
+        type StudentUpdateData = Omit<Partial<Student>, 'id' | 'courses' | 'createdAt' | 'updatedAt'>;
+
         // Prepare update data according to schema
-        const updateData: any = {
+        const updateData: StudentUpdateData = {
             name: formData.get("name") as string | null,
             address: formData.get("address") as string | null,
             phone: formData.get("phone") as string | null,
             email: formData.get("email") as string | null,
             dob: formData.get("dob") ? new Date(formData.get("dob") as string) : undefined,
-            gender: formData.get("gender") as any,
+            gender: formData.get("gender") as Gender,
             currentInstitute: formData.get("currentInstitute") as string | null,
-            currentClass: formData.get("currentClass") as any,
+            currentClass: formData.get("currentClass") as Class,
             sscBatch: formData.get("sscBatch") ? parseInt(formData.get("sscBatch") as string) : undefined,
             guardianName: formData.get("guardianName") as string | null,
             guardianPhone: formData.get("guardianPhone") as string | null,
@@ -119,50 +126,44 @@ export async function updateStudent(formData: FormData) {
 
         // Remove undefined fields (Prisma will not update them)
         Object.keys(updateData).forEach(
-            (key) => updateData[key] === undefined && delete updateData[key]
+            (key) => updateData[key as keyof StudentUpdateData] === undefined && delete updateData[key as keyof StudentUpdateData]
         );
 
-        const updatedStudent = await prisma.student.update({
+        await prisma.student.update({
             where: { id: Number(id) },
             data: updateData,
         });
-
-        return updatedStudent;
-    } catch (error) {
-        return { error: "Failed to update student" };
+    } catch (e) {
+        console.error("Error updating student:", e);
     }
 }
 
-export async function addCourseToStudent(studentId: number, courseId: number) {
+export async function addCourseToStudent(studentId: number, courseId: number): Promise<void> {
     try {
-        const updatedStudent = await prisma.student.update({
+        await prisma.student.update({
             where: { id: studentId },
             data: {
                 courses: {
                     connect: { id: courseId },
                 },
             },
-            include: { courses: true },
         });
-        return updatedStudent;
-    } catch (error) {
-        return { error: "Failed to add course to student" };
+    } catch (e) {
+        console.error("Error adding course:", e);
     }
 }
 
-export async function removeCourseFromStudent(studentId: number, courseId: number) {
+export async function removeCourseFromStudent(studentId: number, courseId: number): Promise<void> {
     try {
-        const updatedStudent = await prisma.student.update({
+        await prisma.student.update({
             where: { id: studentId },
             data: {
                 courses: {
                     disconnect: { id: courseId },
                 },
             },
-            include: { courses: true },
         });
-        return updatedStudent;
-    } catch (error) {
-        return { error: "Failed to remove course from student" };
+    } catch (e) {
+        console.error("Error removing course:", e);
     }
 }
