@@ -7,8 +7,8 @@ export interface Course {
     title: string;
     fee: number;
     isActive: boolean;
-    createdAt: string; // or Date, if you're not serializing to JSON
-    updatedAt: string; // or Date
+    createdAt: Date | string; // Allow both Date and string to handle different sources
+    updatedAt: Date | string; // Allow both Date and string to handle different sources
 }
 
 // Use the same enum types as Prisma

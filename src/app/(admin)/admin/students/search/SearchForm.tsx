@@ -7,11 +7,18 @@ import { searchStudentByRoll } from "@/actions/student";
 import { useActionState, useState } from "react";
 import Info from "./Info";
 import Link from "next/link";
+import { Course, StudentResponse } from "@/lib/types";
 
 export default function SearchForm() {
     const { pending } = useFormStatus();
-    const [state, formAction] = useActionState(searchStudentByRoll as any, null);
-    const [student, setStudent] = useState<any>(null);
+
+    // Create a wrapper function with the correct signature for useActionState
+    const searchStudentWrapper = async (state: StudentResponse, formData: FormData) => {
+        return searchStudentByRoll(formData, formData);
+    };
+
+    const [state, formAction] = useActionState<StudentResponse, FormData>(searchStudentWrapper, null);
+    const [student, setStudent] = useState<StudentResponse | null>(null);
 
     // sync response from server into state
     if (state && !("error" in state) && state !== student) {
@@ -52,9 +59,9 @@ export default function SearchForm() {
                     </Link>
                     <div className="sm:col-span-2 mt-4">
                         <h3 className="font-semibold text-base mb-2">Courses</h3>
-                        {student.courses.length > 0 ? (
+                        {student.courses && student.courses.length > 0 ? (
                             <ul className="space-y-2">
-                                {student.courses.map((course: any) => (
+                                {student.courses.map((course: Course) => (
                                     <li key={course.id} className="border p-3 rounded-md bg-gray-50 shadow-sm">
                                         <p><strong>Title:</strong> {course.title}</p>
                                         <p><strong>Semester:</strong> {course.semester}</p>

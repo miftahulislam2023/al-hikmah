@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import Form from "next/form";
-import { Course, StudentResponse } from "@/lib/types";
+import { Course } from "@/lib/types";
 // Import Class from Prisma client directly to get both the type and value
 import { Class } from "@prisma/client";
 
@@ -130,7 +130,7 @@ export default async function Page({ params }: { params: { studentRoll: string }
                     {studentCourses.map((course: Course) => (
                         <li key={course.id} className="flex items-center justify-between border rounded px-3 py-2">
                             <span>{course.title}</span>
-                            <form action={async (formData: FormData) => {
+                            <form action={async () => {
                                 'use server';
                                 await removeCourseFromStudent(student.id, course.id);
                             }}>

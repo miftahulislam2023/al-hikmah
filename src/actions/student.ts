@@ -1,7 +1,6 @@
 "use server"
 import prisma from "@/lib/prisma";
 import { Class, Gender, Student, StudentResponse } from "@/lib/types";
-import { Prisma } from "@prisma/client";
 
 function generateRollNumber(sscBatch: number, studentClass: string, studentId: number) {
     const classMapping: Record<string, string> = {
@@ -72,7 +71,9 @@ export async function searchStudentByRoll(_: FormData, formData: FormData): Prom
 
         if (!student) return { error: "Student not found" };
 
-        const { password: _password, ...safeStudent } = student;
+        // Use destructuring to remove password but we're not using the variable
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password, ...safeStudent } = student;
         return safeStudent as unknown as StudentResponse;
     } catch (e) {
         console.error("Search error:", e);

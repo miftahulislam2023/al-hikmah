@@ -8,15 +8,18 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"; import Form from "next/form";
+} from "@/components/ui/select";
+import Form from "next/form";
 import { notFound } from "next/navigation";
 
-export default async function ViewCourse({
-    params,
-}: {
-    params: { courseId: string };
-}) {
-    const courseId = (await params).courseId;
+type PageProps = {
+    params: {
+        courseId: string
+    }
+}
+
+export default async function Page({ params }: PageProps) {
+    const { courseId } = params;
 
     const { data: course, error } = await getCourseById(courseId);
     if (!course || error) return notFound();
@@ -50,7 +53,6 @@ export default async function ViewCourse({
                                 </SelectContent>
                             </Select>
                         </div>
-
 
                         <div className="space-y-2">
                             <Label htmlFor="title">Title</Label>

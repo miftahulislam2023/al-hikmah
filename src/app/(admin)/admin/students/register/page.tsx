@@ -62,14 +62,14 @@ export default function RegisterStudent() {
                         <Label>SSC Batch</Label>
                         <Input id="sscBatch" type="text" name="sscBatch" placeholder="Enter SSC batch year (e.g., 22)" required />
 
-                        <Label>Guardian's Name</Label>
-                        <Input id="guardianName" type="text" name="guardianName" placeholder="Enter guardian's name" required />
+                        <Label>Guardian&apos;s Name</Label>
+                        <Input id="guardianName" type="text" name="guardianName" placeholder="Enter guardian&apos;s name" required />
 
-                        <Label>Guardian's Occupation</Label>
-                        <Input id="guardianOccupation" type="text" name="guardianOccupation" placeholder="Enter guardian's occupation" required />
+                        <Label>Guardian&apos;s Occupation</Label>
+                        <Input id="guardianOccupation" type="text" name="guardianOccupation" placeholder="Enter guardian&apos;s occupation" required />
 
-                        <Label >Guardian's Phone</Label>
-                        <Input id="guardianPhone" type="text" name="guardianPhone" placeholder="Enter guardian's phone number" required />
+                        <Label>Guardian&apos;s Phone</Label>
+                        <Input id="guardianPhone" type="text" name="guardianPhone" placeholder="Enter guardian&apos;s phone number" required />
                         <Button type="submit" className="w-full">Register Student</Button>
                     </Form>
                 </CardContent>
