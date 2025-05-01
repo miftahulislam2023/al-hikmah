@@ -19,7 +19,7 @@ model Student {
   dob                DateTime?
   gender             Gender?
   currentInstitute   String?
-  currentClass       Class
+  currentClass       Class?
   roll               String?
   role               Role      @default(USER)
   guardianName       String?
