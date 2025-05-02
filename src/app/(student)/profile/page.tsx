@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import Image from 'next/image';
+import Link from 'next/link';
 
 export default async function StudentProfile() {
     const session = await auth()
@@ -15,7 +15,9 @@ export default async function StudentProfile() {
                             </svg>
                         </div>
                         <h1 className="text-2xl font-bold text-red-600">Not logged in</h1>
-                        <p className="mt-2 text-gray-600">Please log in to view your profile.</p>
+                        <p className="mt-2 text-gray-600">Please <Link href="/profile/signin" className='text-blue-500 font-bold'>
+                            login
+                        </Link>  to view your profile.</p>
                     </div>
                 </div>
             </div>
@@ -23,11 +25,6 @@ export default async function StudentProfile() {
     }
 
     const user = session.user;
-
-    // Default avatar based on gender
-    const avatarSrc = user.gender?.toLowerCase() === 'female'
-        ? '/student-female-avatar.png'
-        : '/student-male-avatar.png';
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-10 px-4">
@@ -191,12 +188,10 @@ export default async function StudentProfile() {
                 {/* Motivational Quote */}
                 <div className="mt-6 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-xl shadow-lg p-6 text-center">
                     <blockquote className="text-white italic font-medium text-lg">
-                        "Education is the most powerful weapon which you can use to change the world."
+                        &ldquo;Education is the most powerful weapon which you can use to change the world.&rdquo;
                     </blockquote>
                     <p className="text-blue-200 mt-2">- Nelson Mandela</p>
                 </div>
-
-                {/* Footer */}
                 <div className="mt-8 text-center text-gray-500 text-sm">
                     <p>Al-Hikmah Academy Student Portal • 2025</p>
                 </div>

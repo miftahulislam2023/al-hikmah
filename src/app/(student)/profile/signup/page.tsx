@@ -4,8 +4,9 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Form from "next/form";
 import { signupStudent } from "@/actions/auth";
+import Link from "next/link";
 
-export default function () {
+export default function SignupPage() {
     return (
         <div className="flex justify-center items-center min-h-screen p-4">
             <Card className="w-full max-w-md shadow-lg">
@@ -30,7 +31,7 @@ export default function () {
                 </CardContent>
                 <CardFooter className="flex justify-center">
                     <p className="text-sm text-muted-foreground">
-                        Already have an account? <a href="/api/auth/signin" className="text-primary hover:underline">Login</a>
+                        Already have an account? <Link href="/api/auth/signin" className="text-primary hover:underline">Login</Link>
                     </p>
                 </CardFooter>
             </Card>
