@@ -63,6 +63,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     guardianName: student.guardianName || "",
                     guardianPhone: student.guardianPhone || "",
                     guardianOccupation: student.guardianOccupation || "",
+                    role: student.role || "USER",
                 }
             },
 
@@ -87,6 +88,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 token.guardianName = user.guardianName
                 token.guardianPhone = user.guardianPhone
                 token.guardianOccupation = user.guardianOccupation
+                token.role = user.role
             }
             return token
         },
@@ -108,6 +110,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 session.user.guardianName = token.guardianName as string
                 session.user.guardianPhone = token.guardianPhone as string
                 session.user.guardianOccupation = token.guardianOccupation as string
+                session.user.role = token.role as string
             }
             return session
         },

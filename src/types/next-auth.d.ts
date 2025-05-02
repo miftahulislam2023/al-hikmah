@@ -20,6 +20,7 @@ declare module "next-auth" {
             guardianName: string
             guardianPhone: string
             guardianOccupation: string
+            role: string
         } & DefaultSession["user"]
     }
 
@@ -41,6 +42,7 @@ declare module "next-auth" {
         guardianName: string
         guardianPhone: string
         guardianOccupation: string
+        role: string
     }
 }
 
