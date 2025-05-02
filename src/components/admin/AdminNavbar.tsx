@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { Button } from "../ui/button";
+import { signOut } from "next-auth/react";
 
 export default function AdminNavbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -102,12 +104,34 @@ export default function AdminNavbar() {
                         </svg>
                         Payment
                     </NavLink>
+                    <div className="hidden sm:ml-6 sm:flex sm:items-center">
+                        <Button
+                            onClick={() => signOut({ callbackUrl: "/signin" })}
+                            variant="destructive"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4 mr-0.5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                                />
+                            </svg>
+                            Sign Out
+                        </Button>
+                    </div>
                 </nav>
             </div>
 
             {/* Mobile Navigation - Animated Dropdown */}
             <div
-                className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${mobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${mobileMenuOpen ? "max-h-112 opacity-100" : "max-h-0 opacity-0"
                     }`}
             >
                 <div className="px-4 sm:px-6 pt-4 pb-6 border-t border-gray-700/50 bg-gray-800/50 backdrop-blur-sm">
@@ -148,6 +172,28 @@ export default function AdminNavbar() {
                             </svg>
                             Payment
                         </MobileNavLink>
+                        <div className="flex w-dvw-full justify-end">
+                            <Button
+                                onClick={() => signOut({ callbackUrl: "/signin" })}
+                                variant="destructive"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-4 w-4 mr-0.5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                                    />
+                                </svg>
+                                Sign Out
+                            </Button>
+                        </div>
                     </nav>
                 </div>
             </div>
@@ -165,8 +211,8 @@ const NavLink = ({ href, currentPath, children }) => {
         <Link
             href={href}
             className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${isActive
-                    ? "bg-gradient-to-r from-indigo-600/90 to-purple-600/90 text-white shadow-md"
-                    : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                ? "bg-gradient-to-r from-indigo-600/90 to-purple-600/90 text-white shadow-md"
+                : "text-gray-300 hover:bg-gray-800 hover:text-white"
                 }`}
         >
             {children}
@@ -184,8 +230,8 @@ const MobileNavLink = ({ href, currentPath, children }) => {
         <Link
             href={href}
             className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${isActive
-                    ? "bg-gradient-to-r from-indigo-600/90 to-purple-600/90 text-white shadow-md"
-                    : "text-gray-200 hover:bg-gray-700/70 hover:text-white"
+                ? "bg-gradient-to-r from-indigo-600/90 to-purple-600/90 text-white shadow-md"
+                : "text-gray-200 hover:bg-gray-700/70 hover:text-white"
                 }`}
         >
             {children}

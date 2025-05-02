@@ -1,5 +1,6 @@
 import "@/app/globals.css";
 import { auth } from "@/auth";
+import StudentNavbar from "@/components/student/StudentNavbar";
 import Link from "next/link";
 
 export default async function StudentLayout({
@@ -12,6 +13,7 @@ export default async function StudentLayout({
 
     return isUser ? (
         <main>
+            <StudentNavbar />
             {children}
         </main>
     ) : (

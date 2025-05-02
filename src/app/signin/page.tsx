@@ -46,8 +46,20 @@ function SubmitButton() {
 
 function SignInContent() {
     const router = useRouter();
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const [state, formAction] = useActionState(authenticate, { error: "", success: false });
+
+    // Redirect if already signed in
+    useEffect(() => {
+        if (status === "authenticated" && session) {
+            // Redirect based on role
+            if (session.user.role === "ADMIN") {
+                router.push("/admin");
+            } else {
+                router.push("/profile");
+            }
+        }
+    }, [status, session, router]);
 
     // Use effect to redirect after successful authentication
     useEffect(() => {
@@ -61,6 +73,15 @@ function SignInContent() {
             router.refresh();
         }
     }, [state.success, router, session]);
+
+    // Show loading state while checking authentication status
+    if (status === "loading") {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <p>Loading...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">

@@ -40,7 +40,7 @@ export default async function RootLayout({
             <p className="text-center text-gray-500 text-sm">This section is restricted to administrative staff only.</p>
             <div className="flex justify-center mt-2">
               <Link
-                href="/profile/signin"
+                href="/signin"
                 className="flex items-center justify-center rounded-md bg-blue-600 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
                 <svg
@@ -67,7 +67,7 @@ export default async function RootLayout({
   return (
     <>
       <AdminNavbar />
-      <main className="pt-20">
+      <main className="pt-18">
         {children}
       </main>
     </>
