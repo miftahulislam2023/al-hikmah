@@ -31,7 +31,7 @@ export default function SignupPage() {
                 </CardContent>
                 <CardFooter className="flex justify-center">
                     <p className="text-sm text-muted-foreground">
-                        Already have an account? <Link href="/api/auth/signin" className="text-primary hover:underline">Login</Link>
+                        Already have an account? <Link href="/signin" className="text-primary hover:underline">Login</Link>
                     </p>
                 </CardFooter>
             </Card>

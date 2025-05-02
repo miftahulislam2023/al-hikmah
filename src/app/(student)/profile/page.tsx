@@ -1,29 +1,7 @@
 import { auth } from '@/auth';
-import Link from 'next/link';
 
 export default async function StudentProfile() {
     const session = await auth()
-
-    if (!session?.user) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-                <div className="p-8 bg-white rounded-xl shadow-xl border border-indigo-100">
-                    <div className="flex flex-col items-center">
-                        <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H9m3-4V3" />
-                            </svg>
-                        </div>
-                        <h1 className="text-2xl font-bold text-red-600">Not logged in</h1>
-                        <p className="mt-2 text-gray-600">Please <Link href="/profile/signin" className='text-blue-500 font-bold'>
-                            login
-                        </Link>  to view your profile.</p>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
     const user = session.user;
 
     return (

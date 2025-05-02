@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, useSession, SessionProvider } from "next-auth/react";
 import { useEffect } from "react";
 
 // Server action for handling authentication
@@ -44,17 +44,23 @@ function SubmitButton() {
     );
 }
 
-export default function SignInPage() {
+function SignInContent() {
     const router = useRouter();
+    const { data: session } = useSession();
     const [state, formAction] = useActionState(authenticate, { error: "", success: false });
 
     // Use effect to redirect after successful authentication
     useEffect(() => {
-        if (state.success) {
-            router.push("/profile");
+        if (state.success && session) {
+            // Check user role and redirect accordingly
+            if (session.user.role === "ADMIN") {
+                router.push("/admin");
+            } else {
+                router.push("/profile");
+            }
             router.refresh();
         }
-    }, [state.success, router]);
+    }, [state.success, router, session]);
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
@@ -87,10 +93,18 @@ export default function SignInPage() {
                 </CardContent>
                 <CardFooter className="flex justify-center">
                     <p className="text-sm text-muted-foreground">
-                        Don&apos;t have an account? <a href="/profile/signup" className="text-primary hover:underline">Sign Up</a>
+                        Don&apos;t have an account? <a href="/signup" className="text-primary hover:underline">Sign Up</a>
                     </p>
                 </CardFooter>
             </Card>
         </div>
+    );
+}
+
+export default function SignInPage() {
+    return (
+        <SessionProvider>
+            <SignInContent />
+        </SessionProvider>
     );
 }
