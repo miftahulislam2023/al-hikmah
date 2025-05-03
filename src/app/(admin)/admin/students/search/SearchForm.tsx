@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { searchStudentByEmail } from "@/actions/student";
 import { useActionState, useState } from "react";
-import Info from "./Info";
 import Link from "next/link";
 import { Course, StudentResponse } from "@/lib/types";
 
@@ -77,5 +76,14 @@ export default function SearchForm() {
                 </div>
             )}
         </form>
+    );
+}
+
+function Info({ label, value }: { label: string; value: string | number | null | undefined }) {
+    return (
+        <div className="flex flex-col">
+            <span className="text-gray-600">{label}</span>
+            <span className="text-gray-900">{value ?? "N/A"}</span>
+        </div>
     );
 }

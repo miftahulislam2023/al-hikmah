@@ -25,9 +25,9 @@ export default async function Page({ params }: PageProps) {
     if (!course || error) return notFound();
 
     return (
-        <div className="min-h-screen bg-gray-100 px-6 py-20">
+        <div className="bg-gray-100 px-6 py-20">
             <div className="max-w-3xl mx-auto">
-                <h1 className="text-5xl font-bold text-center mb-16 text-gray-800">
+                <h1 className="text-3xl font-bold text-center mb-16 text-gray-800">
                     Course Details
                 </h1>
 
