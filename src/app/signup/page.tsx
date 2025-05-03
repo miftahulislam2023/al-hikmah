@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useSession, SessionProvider } from "next-auth/react";
 import { useEffect } from "react";
 import Link from "next/link";
+import { signupStudent as signupStudentAction } from "@/actions/auth";
 
 // Server action for handling student registration
 async function signupStudent(prevState: { error: string, success: boolean }, formData: FormData) {
@@ -17,21 +18,18 @@ async function signupStudent(prevState: { error: string, success: boolean }, for
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
 
-        // Make API call to register the student
-        const response = await fetch("/api/auth/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            return { error: data.message || "Registration failed", success: false };
+        if (!email || !password) {
+            return { error: "Email and password are required", success: false };
         }
 
+        if (password.length < 6) {
+            return { error: "Password must be at least 6 characters", success: false };
+        }
+
+        // Use the server action to register the student
+        await signupStudentAction(formData);
+
+        // If we get here, assume success
         return { success: true, error: "" };
     } catch (error) {
         console.error("Registration error:", error);
