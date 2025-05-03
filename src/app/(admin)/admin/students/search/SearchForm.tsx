@@ -3,7 +3,7 @@
 import { useFormStatus } from "react-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { searchStudentByRoll } from "@/actions/student";
+import { searchStudentByEmail } from "@/actions/student";
 import { useActionState, useState } from "react";
 import Info from "./Info";
 import Link from "next/link";
@@ -14,7 +14,7 @@ export default function SearchForm() {
 
     // Create a wrapper function with the correct signature for useActionState
     const searchStudentWrapper = async (state: StudentResponse, formData: FormData) => {
-        return searchStudentByRoll(formData, formData);
+        return searchStudentByEmail(formData, formData);
     };
 
     const [state, formAction] = useActionState<StudentResponse, FormData>(searchStudentWrapper, null);
@@ -29,7 +29,7 @@ export default function SearchForm() {
     return (
         <form action={formAction} className="space-y-6">
             <div className="flex gap-2">
-                <Input type="text" name="roll" placeholder="Enter roll number" required />
+                <Input type="text" name="email" placeholder="Enter student's email" required />
                 <Button type="submit" disabled={pending}>
                     {pending ? "Searching..." : "Search"}
                 </Button>
@@ -54,7 +54,7 @@ export default function SearchForm() {
                     <Info label="Address" value={student.address} />
                     <Info label="Created At" value={new Date(student.createdAt).toLocaleString()} />
                     <Info label="Updated At" value={new Date(student.updatedAt).toLocaleString()} />
-                    <Link href={`/admin/students/${student.roll}`} className="sm:col-span-2">
+                    <Link href={`/admin/students/${student.email}`} className="sm:col-span-2">
                         <Button>Update Profile</Button>
                     </Link>
                     <div className="sm:col-span-2 mt-4">

@@ -1,6 +1,7 @@
 "use server"
 import prisma from "@/lib/prisma";
 import { Class, Gender, Student, StudentResponse } from "@/lib/types";
+import { revalidatePath } from "next/cache";
 
 function generateRollNumber(sscBatch: number, studentClass: string, studentId: number) {
     const classMapping: Record<string, string> = {
@@ -57,15 +58,14 @@ export async function registerStudent(formData: FormData): Promise<void> {
     }
 }
 
-export async function searchStudentByRoll(_: FormData, formData: FormData): Promise<StudentResponse> {
-    const roll = formData.get("roll") as string;
+export async function searchStudentByEmail(_: FormData, formData: FormData): Promise<StudentResponse> {
+    const email = formData.get("email") as string;
 
-    if (!roll) return { error: "Roll number is required" };
+    if (!email) return { error: "Email number is required" };
 
     try {
-        const id = parseInt(roll.slice(-4));
         const student = await prisma.student.findUnique({
-            where: { id },
+            where: { email },
             include: { courses: true },
         });
 
@@ -81,15 +81,13 @@ export async function searchStudentByRoll(_: FormData, formData: FormData): Prom
     }
 }
 
-export async function getStudentByRoll(roll: string): Promise<StudentResponse> {
-    if (!roll) return { error: "Roll number is required" };
-    const id = parseInt(roll.slice(-4));
+export async function getStudentByEmail(email: string) {
+    const decodedEmail = email.replace('%40', '@');
     try {
         const student = await prisma.student.findUnique({
-            where: { id },
+            where: { email: decodedEmail },
             include: { courses: true },
         });
-
         if (!student) return { error: "Student not found" };
         return student as unknown as StudentResponse;
     } catch (e) {
@@ -105,8 +103,10 @@ export async function updateStudent(formData: FormData): Promise<void> {
             console.error("Student ID is required");
             return;
         }
-
-        // Remove id from the update data
+        let roll = formData.get("roll") as string | null;
+        if (formData.get("roll") === null) {
+            roll = generateRollNumber(parseInt(formData.get("sscBatch") as string), formData.get("currentClass") as string, Number(id));
+        }
         type StudentUpdateData = Omit<Partial<Student>, 'id' | 'courses' | 'createdAt' | 'updatedAt'>;
 
         // Prepare update data according to schema
@@ -123,6 +123,7 @@ export async function updateStudent(formData: FormData): Promise<void> {
             guardianName: formData.get("guardianName") as string | null,
             guardianPhone: formData.get("guardianPhone") as string | null,
             guardianOccupation: formData.get("guardianOccupation") as string | null,
+            roll
         };
 
         // Remove undefined fields (Prisma will not update them)
@@ -134,8 +135,79 @@ export async function updateStudent(formData: FormData): Promise<void> {
             where: { id: Number(id) },
             data: updateData,
         });
+
+        revalidatePath('/admin/students/*');
     } catch (e) {
         console.error("Error updating student:", e);
+    }
+}
+
+/**
+ * Enhanced student profile update function with better error handling and redirection
+ */
+export async function updateStudentProfile(formData: FormData): Promise<void> {
+    try {
+        const id = formData.get("id");
+        if (!id) {
+            console.error("Student ID is required");
+            return;
+        }
+        let roll = formData.get("roll") as string | null;
+        // Log form data for debugging
+        console.log("Updating student profile for ID:", id);
+        if (formData.get("roll") === null) {
+            roll = generateRollNumber(parseInt(formData.get("sscBatch") as string), formData.get("currentClass") as string, Number(id));
+        }
+        const name = formData.get("name") as string | null;
+        const email = formData.get("email") as string;
+        const phone = formData.get("phone") as string | null;
+        const address = formData.get("address") as string | null;
+        const dobValue = formData.get("dob") as string | null;
+        const dob = dobValue ? new Date(dobValue) : null;
+        const gender = formData.get("gender") as Gender | null;
+        const currentInstitute = formData.get("currentInstitute") as string | null;
+        const currentClass = formData.get("currentClass") as Class | null;
+        const sscBatchValue = formData.get("sscBatch") as string | null;
+        const sscBatch = sscBatchValue && sscBatchValue.trim() !== "" ? parseInt(sscBatchValue) : null;
+        const guardianName = formData.get("guardianName") as string | null;
+        const guardianPhone = formData.get("guardianPhone") as string | null;
+        const guardianOccupation = formData.get("guardianOccupation") as string | null;
+
+        // Create update data object
+        const updateData = {
+            name,
+            email,
+            phone,
+            address,
+            dob,
+            gender,
+            currentInstitute,
+            currentClass,
+            sscBatch,
+            guardianName,
+            guardianPhone,
+            guardianOccupation,
+            roll,
+        };
+
+        console.log("Update data:", updateData);
+
+        // Update the student record
+        const updatedStudent = await prisma.student.update({
+            where: { id: Number(id) },
+            data: updateData,
+        });
+
+        console.log("Student updated successfully:", updatedStudent.id);
+
+        revalidatePath('/profile');
+        revalidatePath('/profile/edit');
+
+        // Add a slight delay to ensure revalidation has time to process
+        await new Promise(resolve => setTimeout(resolve, 100));
+    } catch (error) {
+        console.error("Error updating student profile:", error);
+        // Don't return an object to maintain the correct return type
     }
 }
 

@@ -1,4 +1,4 @@
-import { getStudentByRoll, updateStudent, addCourseToStudent, removeCourseFromStudent } from "@/actions/student";
+import { updateStudent, addCourseToStudent, removeCourseFromStudent, getStudentByEmail } from "@/actions/student";
 import { getAllCourse } from "@/actions/course";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,9 +9,9 @@ import { Course } from "@/lib/types";
 // Import Class from Prisma client directly to get both the type and value
 import { Class } from "@prisma/client";
 
-export default async function Page({ params }: { params: { studentRoll: string } }) {
-    const { studentRoll } = (await params);
-    const student = await getStudentByRoll(studentRoll);
+export default async function Page({ params }: { params: { studentEmail: string } }) {
+    const { studentEmail } = (await params);
+    const student = await getStudentByEmail(studentEmail);
     if (!student || 'error' in student) {
         return <p className="text-red-500 text-sm">Student not found</p>;
     }
@@ -34,22 +34,22 @@ export default async function Page({ params }: { params: { studentRoll: string }
 
                 <div className="space-y-1">
                     <Label htmlFor="name">Name</Label>
-                    <Input id="name" name="name" defaultValue={student.name || ''} />
+                    <Input id="name" name="name" defaultValue={student.name || ''} required />
                 </div>
 
                 <div className="space-y-1">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" name="email" type="email" defaultValue={student.email} />
+                    <Input id="email" name="email" type="email" defaultValue={student.email} required />
                 </div>
 
                 <div className="space-y-1">
                     <Label htmlFor="phone">Phone</Label>
-                    <Input id="phone" name="phone" defaultValue={student.phone || ''} />
+                    <Input id="phone" name="phone" defaultValue={student.phone || ''} required />
                 </div>
 
                 <div className="space-y-1">
                     <Label htmlFor="address">Address</Label>
-                    <Input id="address" name="address" defaultValue={student.address || ''} />
+                    <Input id="address" name="address" defaultValue={student.address || ''} required />
                 </div>
 
                 <div className="space-y-1">
@@ -59,13 +59,14 @@ export default async function Page({ params }: { params: { studentRoll: string }
                         name="dob"
                         type="date"
                         defaultValue={student.dob ? new Date(student.dob).toISOString().split("T")[0] : ""}
+                        required
                     />
                 </div>
 
                 <div className="space-y-1">
                     <Label htmlFor="gender">Gender</Label>
-                    <Select name="gender" defaultValue={student.gender || undefined}>
-                        <SelectTrigger>
+                    <Select name="gender" defaultValue={student.gender || ""} required>
+                        <SelectTrigger id="gender">
                             <SelectValue placeholder="Select Gender" />
                         </SelectTrigger>
                         <SelectContent>
@@ -77,20 +78,22 @@ export default async function Page({ params }: { params: { studentRoll: string }
 
                 <div className="space-y-1">
                     <Label htmlFor="currentInstitute">Current Institute</Label>
-                    <Input id="currentInstitute" name="currentInstitute" defaultValue={student.currentInstitute || ''} />
+                    <Input id="currentInstitute" name="currentInstitute" defaultValue={student.currentInstitute || ''} required />
                 </div>
 
-                <Label>Current Class</Label>
-                <Select name="currentClass" defaultValue={student.currentClass} required>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select Class" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {classValues.map((cls) => (
-                            <SelectItem key={cls} value={cls}>{cls}</SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                <div className="space-y-1">
+                    <Label htmlFor="currentClass">Current Class</Label>
+                    <Select name="currentClass" defaultValue={student.currentClass || ""} required>
+                        <SelectTrigger id="currentClass">
+                            <SelectValue placeholder="Select Class" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {classValues.map((cls) => (
+                                <SelectItem key={cls} value={cls}>{cls}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
 
                 <div className="space-y-1">
                     <Label htmlFor="sscBatch">SSC Batch</Label>
@@ -99,22 +102,23 @@ export default async function Page({ params }: { params: { studentRoll: string }
                         name="sscBatch"
                         type="number"
                         defaultValue={student.sscBatch?.toString() || ''}
+                        required
                     />
                 </div>
 
                 <div className="space-y-1">
                     <Label htmlFor="guardianName">Guardian Name</Label>
-                    <Input id="guardianName" name="guardianName" defaultValue={student.guardianName || ''} />
+                    <Input id="guardianName" name="guardianName" defaultValue={student.guardianName || ''} required />
                 </div>
 
                 <div className="space-y-1">
                     <Label htmlFor="guardianPhone">Guardian Phone</Label>
-                    <Input id="guardianPhone" name="guardianPhone" defaultValue={student.guardianPhone || ''} />
+                    <Input id="guardianPhone" name="guardianPhone" defaultValue={student.guardianPhone || ''} required />
                 </div>
 
                 <div className="space-y-1">
                     <Label htmlFor="guardianOccupation">Guardian Occupation</Label>
-                    <Input id="guardianOccupation" name="guardianOccupation" defaultValue={student.guardianOccupation || ''} />
+                    <Input id="guardianOccupation" name="guardianOccupation" defaultValue={student.guardianOccupation || ''} required />
                 </div>
 
                 <Button type="submit" className="w-full">

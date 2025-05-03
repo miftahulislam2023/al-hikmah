@@ -3,7 +3,7 @@ import Credentials from "next-auth/providers/credentials"
 import { compare } from "bcryptjs";
 import prisma from "./lib/prisma";
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const { handlers, signIn, signOut, auth: nextAuth } = NextAuth({
     // session: {
     //     strategy: "jwt",
     // },
@@ -118,3 +118,44 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
 
 })
+
+// Custom auth function that ensures fresh data
+export async function auth() {
+    const session = await nextAuth();
+
+    // If there is a session and user ID, fetch the latest user data from DB
+    if (session?.user?.id) {
+        try {
+            // Get fresh user data from database
+            const freshUserData = await prisma.student.findUnique({
+                where: { id: Number(session.user.id) },
+            });
+
+            if (freshUserData) {
+                // Update session with fresh data
+                session.user = {
+                    ...session.user,
+                    id: freshUserData.id.toString(),
+                    name: freshUserData.name || "",
+                    email: freshUserData.email,
+                    phone: freshUserData.phone || "",
+                    sscBatch: freshUserData.sscBatch?.toString() || "",
+                    address: freshUserData.address || "",
+                    dob: freshUserData.dob,
+                    gender: freshUserData.gender || "",
+                    currentInstitute: freshUserData.currentInstitute || "",
+                    currentClass: freshUserData.currentClass?.toString() || "",
+                    roll: freshUserData.roll || "",
+                    guardianName: freshUserData.guardianName || "",
+                    guardianPhone: freshUserData.guardianPhone || "",
+                    guardianOccupation: freshUserData.guardianOccupation || "",
+                    role: freshUserData.role || "USER",
+                };
+            }
+        } catch (error) {
+            console.error("Error refreshing user data:", error);
+        }
+    }
+
+    return session;
+}

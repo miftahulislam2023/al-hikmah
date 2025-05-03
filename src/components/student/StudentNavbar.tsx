@@ -22,6 +22,12 @@ export default function StudentNavbar() {
                             >
                                 Profile
                             </Link>
+                            <Link
+                                href="/profile/edit"
+                                className="border-transparent text-gray-600 hover:border-blue-500 hover:text-blue-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                            >
+                                Edit
+                            </Link>
                             {/* Add more navigation links as needed */}
                         </div>
                     </div>
