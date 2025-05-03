@@ -27,7 +27,7 @@ export default async function Page({ params }: PageProps) {
     return (
         <div className="min-h-screen bg-gray-100 px-6 py-20">
             <div className="max-w-3xl mx-auto">
-                <h1 className="text-5xl font-bold text-center mb-16 leading-tight text-gray-800">
+                <h1 className="text-5xl font-bold text-center mb-16 text-gray-800">
                     Course Details
                 </h1>
 
@@ -89,7 +89,7 @@ export default async function Page({ params }: PageProps) {
                             </Select>
                         </div>
 
-                        <Button type="submit" className="w-full bg-gray-800 text-white text-lg rounded-lg py-3">
+                        <Button type="submit" className="w-full bg-gray-800 text-white rounded-lg">
                             Update Course
                         </Button>
                     </Form>

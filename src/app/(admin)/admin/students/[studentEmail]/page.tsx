@@ -128,7 +128,7 @@ export default async function Page({ params }: { params: { studentEmail: string 
 
             {/* Student Courses Section */}
             <div className="mb-10">
-                <h2 className="text-xl font-semibold mb-2">Student Courses</h2>
+                <h2 className="text-xl font-bold mb-2">Student Courses</h2>
                 <ul className="mb-4 space-y-2">
                     {studentCourses.length === 0 && <li className="text-gray-500">No courses assigned.</li>}
                     {studentCourses.map((course: Course) => (

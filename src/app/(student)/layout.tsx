@@ -2,6 +2,12 @@ import "@/app/globals.css";
 import { auth } from "@/auth";
 import StudentNavbar from "@/components/student/StudentNavbar";
 import Link from "next/link";
+import { Poppins } from 'next/font/google'
+
+const poppins = Poppins({
+    subsets: ['latin'],
+    weight: ['400', '500', '600', '700'],
+})
 
 export default async function StudentLayout({
     children,
@@ -12,7 +18,7 @@ export default async function StudentLayout({
     const isUser = session?.user.role === "USER";
 
     return isUser ? (
-        <main>
+        <main className={poppins.className}>
             <StudentNavbar />
             {children}
         </main>

@@ -32,12 +32,12 @@ export default async function StudentProfile() {
                             </div>
                             <div className="flex-grow text-center md:text-left">
                                 <h2 className="text-2xl font-bold text-gray-800">{user.name || 'Student'}</h2>
-                                <p className="text-indigo-600 font-medium">Roll: {user.roll || 'Not assigned'}</p>
+                                <p className="text-indigo-600">Roll: {user.roll || 'Not assigned'}</p>
                                 <div className="mt-3 flex flex-wrap justify-center md:justify-start gap-3">
-                                    <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                                    <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
                                         {user.currentClass || 'No Class'} Student
                                     </span>
-                                    <span className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">
+                                    <span className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">
                                         SSC Batch: {user.sscBatch || 'N/A'}
                                     </span>
                                 </div>
@@ -60,15 +60,15 @@ export default async function StudentProfile() {
                         </div>
                         <div className="p-5 space-y-4">
                             <div>
-                                <span className="text-sm text-indigo-500 font-medium">Email</span>
+                                <span className="text-sm text-indigo-500">Email</span>
                                 <p className="text-gray-700">{user.email || 'Not provided'}</p>
                             </div>
                             <div>
-                                <span className="text-sm text-indigo-500 font-medium">Phone</span>
+                                <span className="text-sm text-indigo-500">Phone</span>
                                 <p className="text-gray-700">{user.phone || 'Not provided'}</p>
                             </div>
                             <div>
-                                <span className="text-sm text-indigo-500 font-medium">Date of Birth</span>
+                                <span className="text-sm text-indigo-500">Date of Birth</span>
                                 <p className="text-gray-700">
                                     {user.dob ? new Date(user.dob).toLocaleDateString('en-US', {
                                         day: 'numeric',
@@ -78,11 +78,11 @@ export default async function StudentProfile() {
                                 </p>
                             </div>
                             <div>
-                                <span className="text-sm text-indigo-500 font-medium">Gender</span>
+                                <span className="text-sm text-indigo-500">Gender</span>
                                 <p className="text-gray-700">{user.gender || 'Not provided'}</p>
                             </div>
                             <div>
-                                <span className="text-sm text-indigo-500 font-medium">Address</span>
+                                <span className="text-sm text-indigo-500">Address</span>
                                 <p className="text-gray-700">{user.address || 'Not provided'}</p>
                             </div>
                         </div>
@@ -100,26 +100,26 @@ export default async function StudentProfile() {
                         </div>
                         <div className="p-5 space-y-4">
                             <div>
-                                <span className="text-sm text-indigo-500 font-medium">Current Institute</span>
+                                <span className="text-sm text-indigo-500">Current Institute</span>
                                 <p className="text-gray-700">{user.currentInstitute || 'Not provided'}</p>
                             </div>
                             <div>
-                                <span className="text-sm text-indigo-500 font-medium">Current Class</span>
+                                <span className="text-sm text-indigo-500">Current Class</span>
                                 <p className="text-gray-700">{user.currentClass || 'Not provided'}</p>
                             </div>
                             <div>
-                                <span className="text-sm text-indigo-500 font-medium">Roll Number</span>
+                                <span className="text-sm text-indigo-500">Roll Number</span>
                                 <p className="text-gray-700">{user.roll || 'Not provided'}</p>
                             </div>
                             <div>
-                                <span className="text-sm text-indigo-500 font-medium">SSC Batch</span>
+                                <span className="text-sm text-indigo-500">SSC Batch</span>
                                 <p className="text-gray-700">{user.sscBatch || 'Not provided'}</p>
                             </div>
 
                             {/* Student Badge */}
                             <div className="flex justify-center mt-4">
                                 <div className="py-3 px-4 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-lg border border-indigo-100 text-center">
-                                    <div className="text-sm text-indigo-500 font-medium">Student Since</div>
+                                    <div className="text-sm text-indigo-500">Student Since</div>
                                     <div className="text-indigo-700 font-bold">2025</div>
                                 </div>
                             </div>
@@ -138,15 +138,15 @@ export default async function StudentProfile() {
                         </div>
                         <div className="p-5 space-y-4">
                             <div>
-                                <span className="text-sm text-indigo-500 font-medium">Guardian Name</span>
+                                <span className="text-sm text-indigo-500">Guardian Name</span>
                                 <p className="text-gray-700">{user.guardianName || 'Not provided'}</p>
                             </div>
                             <div>
-                                <span className="text-sm text-indigo-500 font-medium">Guardian Phone</span>
+                                <span className="text-sm text-indigo-500">Guardian Phone</span>
                                 <p className="text-gray-700">{user.guardianPhone || 'Not provided'}</p>
                             </div>
                             <div>
-                                <span className="text-sm text-indigo-500 font-medium">Guardian Occupation</span>
+                                <span className="text-sm text-indigo-500">Guardian Occupation</span>
                                 <p className="text-gray-700">{user.guardianOccupation || 'Not provided'}</p>
                             </div>
 
@@ -156,7 +156,7 @@ export default async function StudentProfile() {
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
                                         <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                                     </svg>
-                                    <span className="text-red-700 font-medium text-sm">Emergency Contact</span>
+                                    <span className="text-red-700 text-sm">Emergency Contact</span>
                                 </div>
                             </div>
                         </div>
@@ -165,7 +165,7 @@ export default async function StudentProfile() {
 
                 {/* Motivational Quote */}
                 <div className="mt-6 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-xl shadow-lg p-6 text-center">
-                    <blockquote className="text-white italic font-medium text-lg">
+                    <blockquote className="text-white italic text-lg">
                         &ldquo;Education is the most powerful weapon which you can use to change the world.&rdquo;
                     </blockquote>
                     <p className="text-blue-200 mt-2">- Nelson Mandela</p>

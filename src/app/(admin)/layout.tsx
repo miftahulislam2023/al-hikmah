@@ -3,6 +3,14 @@ import "@/app/globals.css";
 import AdminNavbar from "@/components/admin/AdminNavbar";
 import { auth } from "@/auth";
 import Link from "next/link";
+import { Poppins } from 'next/font/google'
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+})
+
+
 
 export const metadata: Metadata = {
   title: "Al-Hikmah Academy",
@@ -67,7 +75,7 @@ export default async function RootLayout({
   return (
     <>
       <AdminNavbar />
-      <main className="pt-18">
+      <main className={`${poppins.className} pt-18`}>
         {children}
       </main>
     </>

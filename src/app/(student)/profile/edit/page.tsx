@@ -14,7 +14,7 @@ export default async function EditProfile() {
     const classValues = Object.values(Class);
     return (
         <div className="max-w-4xl mx-auto my-8">
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 rounded-t-lg shadow-lg">
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6 rounded-lg shadow-lg">
                 <h1 className="text-3xl font-bold text-white text-center">My Profile</h1>
                 <p className="text-white text-center mt-2">Update your information here</p>
             </div>
@@ -32,55 +32,51 @@ export default async function EditProfile() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <Label htmlFor="name" className="text-lg font-medium">Name</Label>
+                            <Label htmlFor="name">Name</Label>
                             <Input
                                 id="name"
                                 name="name"
                                 defaultValue={user.name || ''}
                                 required
-                                className="p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="email" className="text-lg font-medium">Email</Label>
+                            <Label htmlFor="email">Email</Label>
                             <Input
                                 id="email"
                                 name="email"
                                 type="email"
                                 defaultValue={user.email}
                                 required
-                                className="p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="phone" className="text-lg font-medium">Phone</Label>
+                            <Label htmlFor="phone">Phone</Label>
                             <Input
                                 id="phone"
                                 name="phone"
                                 defaultValue={user.phone || ''}
                                 required
-                                className="p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="dob" className="text-lg font-medium">Date of Birth</Label>
+                            <Label htmlFor="dob">Date of Birth</Label>
                             <Input
                                 id="dob"
                                 name="dob"
                                 type="date"
                                 defaultValue={user.dob ? new Date(user.dob).toISOString().split("T")[0] : ""}
                                 required
-                                className="p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="gender" className="text-lg font-medium">Gender</Label>
+                            <Label htmlFor="gender">Gender</Label>
                             <Select name="gender" defaultValue={user.gender || ""} required>
-                                <SelectTrigger id="gender" className="p-3 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <SelectTrigger id="gender">
                                     <SelectValue placeholder="Select Gender" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -91,9 +87,9 @@ export default async function EditProfile() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="currentClass" className="text-lg font-medium">Current Class</Label>
+                            <Label htmlFor="currentClass">Current Class</Label>
                             <Select name="currentClass" defaultValue={user.currentClass || ""} required>
-                                <SelectTrigger id="currentClass" className="p-3 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <SelectTrigger id="currentClass">
                                     <SelectValue placeholder="Select Class" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -105,37 +101,34 @@ export default async function EditProfile() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="currentInstitute" className="text-lg font-medium">Current Institute</Label>
+                            <Label htmlFor="currentInstitute">Current Institute</Label>
                             <Input
                                 id="currentInstitute"
                                 name="currentInstitute"
                                 defaultValue={user.currentInstitute || ''}
                                 required
-                                className="p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="sscBatch" className="text-lg font-medium">SSC Batch</Label>
+                            <Label htmlFor="sscBatch">SSC Batch</Label>
                             <Input
                                 id="sscBatch"
                                 name="sscBatch"
                                 type="number"
                                 defaultValue={user.sscBatch?.toString() || ''}
                                 required
-                                className="p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                     </div>
 
                     <div className="space-y-2 mt-4">
-                        <Label htmlFor="address" className="text-lg font-medium">Address</Label>
+                        <Label htmlFor="address">Address</Label>
                         <Input
                             id="address"
                             name="address"
                             defaultValue={user.address || ''}
                             required
-                            className="p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
 
@@ -143,35 +136,32 @@ export default async function EditProfile() {
                         <h2 className="text-xl font-bold text-blue-700 mb-4">Guardian Information</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <Label htmlFor="guardianName" className="text-lg font-medium">Guardian Name</Label>
+                                <Label htmlFor="guardianName">Guardian Name</Label>
                                 <Input
                                     id="guardianName"
                                     name="guardianName"
                                     defaultValue={user.guardianName || ''}
                                     required
-                                    className="p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="guardianPhone" className="text-lg font-medium">Guardian Phone</Label>
+                                <Label htmlFor="guardianPhone">Guardian Phone</Label>
                                 <Input
                                     id="guardianPhone"
                                     name="guardianPhone"
                                     defaultValue={user.guardianPhone || ''}
                                     required
-                                    className="p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
 
                             <div className="space-y-2 md:col-span-2">
-                                <Label htmlFor="guardianOccupation" className="text-lg font-medium">Guardian Occupation</Label>
+                                <Label htmlFor="guardianOccupation">Guardian Occupation</Label>
                                 <Input
                                     id="guardianOccupation"
                                     name="guardianOccupation"
                                     defaultValue={user.guardianOccupation || ''}
                                     required
-                                    className="p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
                         </div>
@@ -179,7 +169,7 @@ export default async function EditProfile() {
 
                     <Button
                         type="submit"
-                        className="w-full mt-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg text-lg font-bold shadow-lg transition-all duration-300 hover:shadow-xl"
+                        className="w-full mt-6"
                     >
                         Save My Information
                     </Button>
