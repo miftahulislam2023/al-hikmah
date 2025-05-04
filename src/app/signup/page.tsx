@@ -1,74 +1,87 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
+import { useSession, SessionProvider } from "next-auth/react";
+import { useEffect } from "react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { auth } from "@/auth";
-import Form from "next/form";
 import { signupStudent as signupStudentAction } from "@/actions/auth";
 
-async function signupStudent(formData: FormData) {
-    "use server";
-
-    let redirectPath: string | null = null;
-
+// Server action for handling student registration
+async function signupStudent(prevState: { error: string, success: boolean }, formData: FormData) {
     try {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
 
         if (!email || !password) {
-            redirectPath = "/signup?error=missing_fields";
-            return;
+            return { error: "Email and password are required", success: false };
         }
 
         if (password.length < 6) {
-            redirectPath = "/signup?error=password_too_short";
-            return;
+            return { error: "Password must be at least 6 characters", success: false };
         }
 
         // Use the server action to register the student
         await signupStudentAction(formData);
 
-        // If successful, redirect to signin
-        redirectPath = "/signin?success=account_created";
+        // If we get here, assume success
+        return { success: true, error: "" };
     } catch (error) {
         console.error("Registration error:", error);
-        redirectPath = "/signup?error=unexpected";
-    } finally {
-        if (redirectPath) {
-            redirect(redirectPath);
-        }
+        return { error: "An unexpected error occurred", success: false };
     }
 }
 
-export default async function SignupPage({
-    searchParams
-}: {
-    searchParams: { error?: string, success?: string }
-}) {
-    const session = await auth();
+// Submit button with loading state
+function SubmitButton() {
+    const { pending } = useFormStatus();
+
+    return (
+        <Button type="submit" className="w-full" disabled={pending}>
+            {pending ? "Creating account..." : "Create account"}
+        </Button>
+    );
+}
+
+function SignUpContent() {
+    const router = useRouter();
+    const { data: session, status } = useSession();
+    const [state, formAction] = useActionState(signupStudent, {
+        error: "",
+        success: false,
+    });
 
     // Redirect if already signed in
-    if (session) {
-        const user = session.user;
-        if (user.role === "ADMIN") {
-            redirect("/admin/");
-        } else {
-            redirect("/profile");
+    useEffect(() => {
+        if (status === "authenticated" && session) {
+            // Redirect based on role
+            if (session.user.role === "ADMIN") {
+                router.push("/admin");
+            } else {
+                router.push("/profile");
+            }
         }
-    }
+    }, [status, session, router]);
 
-    const error = searchParams.error || null;
-    let errorMessage = "";
+    // Redirect after successful registration
+    useEffect(() => {
+        if (state.success) {
+            router.push("/signin");
+        }
+    }, [state.success, router]);
 
-    // Handle different error cases
-    if (error === "missing_fields") {
-        errorMessage = "Email and password are required";
-    } else if (error === "password_too_short") {
-        errorMessage = "Password must be at least 6 characters";
-    } else if (error === "unexpected") {
-        errorMessage = "An unexpected error occurred";
+    // Show loading state while checking authentication status
+    if (status === "loading") {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <p>Loading...</p>
+            </div>
+        );
     }
 
     return (
@@ -81,10 +94,10 @@ export default async function SignupPage({
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Form action={signupStudent} className="space-y-4">
-                        {errorMessage && (
+                    <form action={formAction} className="space-y-4">
+                        {state.error && (
                             <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-                                {errorMessage}
+                                {state.error}
                             </div>
                         )}
                         <div className="space-y-2">
@@ -95,10 +108,8 @@ export default async function SignupPage({
                             <Label htmlFor="password">Password</Label>
                             <Input id="password" type="password" name="password" placeholder="••••••••" required />
                         </div>
-                        <Button type="submit" className="w-full">
-                            Create account
-                        </Button>
-                    </Form>
+                        <SubmitButton />
+                    </form>
                 </CardContent>
                 <CardFooter className="flex justify-center">
                     <p className="text-sm text-muted-foreground">
@@ -107,5 +118,13 @@ export default async function SignupPage({
                 </CardFooter>
             </Card>
         </div>
+    );
+}
+
+export default function SignupPage() {
+    return (
+        <SessionProvider>
+            <SignUpContent />
+        </SessionProvider>
     );
 }

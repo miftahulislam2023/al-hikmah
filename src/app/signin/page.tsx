@@ -1,15 +1,17 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth, signIn } from "@/auth";
-import Form from "next/form";
-import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
+import { signIn, useSession, SessionProvider } from "next-auth/react";
+import { useEffect } from "react";
 
-async function authenticate(formData: FormData) {
-    "use server"; // This is a server action
-    let redirectPath: string | null = null
+// Server action for handling authentication
+async function authenticate(prevState: { error: string, success: boolean }, formData: FormData) {
     try {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
@@ -20,48 +22,66 @@ async function authenticate(formData: FormData) {
             redirect: false,
         });
 
-        // Check if the result indicates an error
         if (result?.error) {
-            return redirect("/signin?error=invalid_credentials");
+            return { error: "Invalid email or password", success: false };
         }
 
-        const session = await auth();
-        const user = session?.user;
-
-        if (!user) {
-            return redirect("/signin?error=auth_failed");
-        }
-
-        if (user.role === "ADMIN") {
-            redirectPath = "/admin/";
-        } else {
-            redirectPath = "/profile";
-        }
+        return { success: true, error: "" };
     } catch (error) {
-        redirectPath = "/signin?error=invalid_credentials";
-    } finally {
-        if (redirectPath) {
-            redirect(redirectPath);
-        }
+        console.error("Authentication error:", error);
+        return { error: "An unexpected error occurred", success: false };
     }
 }
 
-export default async function SignInPage({
-    searchParams
-}: {
-    searchParams: { error?: string }
-}) {
-    const session = await auth()
-    if (session) {
-        const user = session.user;
-        if (user.role === "ADMIN") {
-            redirect("/admin/");
-        } else {
-            redirect("/profile");
-        }
-    }
+// Submit button with loading state
+function SubmitButton() {
+    const { pending } = useFormStatus();
 
-    const error = searchParams.error || null;
+    return (
+        <Button type="submit" className="w-full" disabled={pending}>
+            {pending ? "Signing in..." : "Sign In"}
+        </Button>
+    );
+}
+
+function SignInContent() {
+    const router = useRouter();
+    const { data: session, status } = useSession();
+    const [state, formAction] = useActionState(authenticate, { error: "", success: false });
+
+    // Redirect if already signed in
+    useEffect(() => {
+        if (status === "authenticated" && session) {
+            // Redirect based on role
+            if (session.user.role === "ADMIN") {
+                router.push("/admin");
+            } else {
+                router.push("/profile");
+            }
+        }
+    }, [status, session, router]);
+
+    // Use effect to redirect after successful authentication
+    useEffect(() => {
+        if (state.success && session) {
+            // Check user role and redirect accordingly
+            if (session.user.role === "ADMIN") {
+                router.push("/admin");
+            } else {
+                router.push("/profile");
+            }
+            router.refresh();
+        }
+    }, [state.success, router, session]);
+
+    // Show loading state while checking authentication status
+    if (status === "loading") {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <p>Loading...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
@@ -73,15 +93,10 @@ export default async function SignInPage({
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Form action={authenticate} className="space-y-4">
-                        {(error === "invalid_credentials") && (
-                            <div className="text-red-500 text-sm text-center">
-                                Invalid email or password
-                            </div>
-                        )}
-                        {(error === "auth_failed") && (
-                            <div className="text-red-500 text-sm text-center">
-                                Authentication failed. Please try again.
+                    <form action={formAction} className="space-y-4">
+                        {state.error && (
+                            <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                                {state.error}
                             </div>
                         )}
                         <div className="space-y-2">
@@ -94,18 +109,23 @@ export default async function SignInPage({
                             <Input id="password" type="password" name="password" placeholder="••••••••" required />
                         </div>
 
-                        <div className="space-y-2">
-                            <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">Sign In
-                            </Button>
-                        </div>
-                    </Form>
+                        <SubmitButton />
+                    </form>
                 </CardContent>
                 <CardFooter className="flex justify-center">
                     <p className="text-sm text-muted-foreground">
-                        Don&apos;t have an account? <Link href="/signup" className="text-primary hover:underline">Sign Up</Link>
+                        Don&apos;t have an account? <a href="/signup" className="text-primary hover:underline">Sign Up</a>
                     </p>
                 </CardFooter>
             </Card>
         </div>
+    );
+}
+
+export default function SignInPage() {
+    return (
+        <SessionProvider>
+            <SignInContent />
+        </SessionProvider>
     );
 }
