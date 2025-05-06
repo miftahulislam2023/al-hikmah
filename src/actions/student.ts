@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { Class, Gender, Student, StudentResponse } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 
-function generateRollNumber(sscBatch: number, studentClass: string, studentId: number) {
+export function generateRollNumber(sscBatch: number, studentClass: string, studentId: number) {
     const classMapping: Record<string, string> = {
         "SIX": "06",
         "SEVEN": "07",

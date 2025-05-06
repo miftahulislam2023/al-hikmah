@@ -30,6 +30,19 @@ model Student {
   courses            Course[]  @relation("CourseToStudent")
 }
 
+model Teacher {
+  id               Int       @id @default(autoincrement())
+  name             String?
+  email            String    @unique
+  phone            String?
+  password         String?
+  address          String?
+  dob              DateTime?
+  gender           Gender?
+  currentInstitute String?
+  courses          Course[]
+}
+
 model Course {
   id        Int       @id @default(autoincrement())
   semester  String
@@ -39,21 +52,33 @@ model Course {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   students  Student[] @relation("CourseToStudent")
+  lectures  Lecture[]
+  teachers  Teacher[]
+  payment   Payment[]
 }
 
-model Admin {
-  id        Int      @id @default(autoincrement())
-  name      String?
-  email     String   @unique
-  password  String?
-  role      Role     @default(ADMIN)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Lecture {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  forCourse   Course?  @relation(fields: [courseId], references: [id])
+  courseId    Int?
+}
+
+model Payment {
+  id          Int    @id @default(autoincrement())
+  description String
+  amount      Float
+  forCourse   Course @relation(fields: [courseId], references: [id])
+  courseId    Int
 }
 
 enum Role {
   USER
   ADMIN
+  TEACHER
 }
 
 enum Gender {

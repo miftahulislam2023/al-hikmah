@@ -5,6 +5,7 @@ import { addCourseToStudent } from "@/actions/student";
 import { getBoughtCourses, getCourseById } from "@/actions/course";
 import { notFound, redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import Link from "next/link";
 
 // Server action to handle enrollment
 async function enrollInCourse(courseId: number, studentId: number) {
@@ -21,7 +22,6 @@ async function enrollInCourse(courseId: number, studentId: number) {
         // Redirect back to the same page to show updated enrollment status
         return { success: true, message: "Successfully enrolled in the course" };
     } catch (error) {
-        console.error("Enrollment error:", error);
         return { success: false, message: "Failed to enroll in the course" };
     }
 }
@@ -33,11 +33,11 @@ export default async function CourseDetails({ params }: { params: { courseId: st
 
     if (!studentId) {
         // Redirect to login if not authenticated
-        return redirect('/signin?callbackUrl=/profile/courses');
+        return redirect('/signin');
     }
-
+    const paramsCourseId = (await params).courseId;
     // Fetch the course details
-    const { data: course, error } = await getCourseById(params.courseId);
+    const { data: course, error } = await getCourseById(paramsCourseId);
 
     if (error || !course) {
         return notFound();
@@ -64,8 +64,8 @@ export default async function CourseDetails({ params }: { params: { courseId: st
                                 Semester {course.semester}
                             </div>
                             <div className={`rounded-full px-4 py-1 text-sm font-medium ${course.isActive
-                                    ? "bg-green-100 text-green-700"
-                                    : "bg-red-100 text-red-600"
+                                ? "bg-green-100 text-green-700"
+                                : "bg-red-100 text-red-600"
                                 }`}>
                                 {course.isActive ? "Active" : "Inactive"}
                             </div>
@@ -156,7 +156,7 @@ export default async function CourseDetails({ params }: { params: { courseId: st
                                     </div>
                                     <div>
                                         <h4 className="font-medium text-green-800">You&apos;re already enrolled in this course</h4>
-                                        <p className="text-sm text-green-700">Continue your learning journey from your course dashboard</p>
+                                        <p className="text-sm text-green-700">Continue your learning journey from your course <Link href={`/profile/courses/${paramsCourseId}/dashboard`}>dashboard</Link></p>
                                     </div>
                                 </div>
                             ) : (

@@ -10,17 +10,18 @@ declare module "next-auth" {
             name: string
             email: string
             phone: string
-            roll: string
-            sscBatch: string
             address: string
             dob: Date | null
             gender: string
             currentInstitute: string
-            currentClass: string
-            guardianName: string
-            guardianPhone: string
-            guardianOccupation: string
             role: string
+            // Student-specific properties (only available when role is not TEACHER)
+            roll?: string
+            sscBatch?: string
+            currentClass?: string
+            guardianName?: string
+            guardianPhone?: string
+            guardianOccupation?: string
         } & DefaultSession["user"]
     }
 
@@ -32,17 +33,18 @@ declare module "next-auth" {
         name: string
         email: string
         phone: string
-        roll: string
-        sscBatch: string
         address: string
         dob: Date | null
         gender: string
         currentInstitute: string
-        currentClass: string
-        guardianName: string
-        guardianPhone: string
-        guardianOccupation: string
         role: string
+        // Student-specific properties (only available when role is not TEACHER)
+        roll?: string
+        sscBatch?: string
+        currentClass?: string
+        guardianName?: string
+        guardianPhone?: string
+        guardianOccupation?: string
     }
 }
 
@@ -53,15 +55,17 @@ declare module "next-auth/jwt" {
         name: string
         email: string
         phone: string
-        roll: string
-        sscBatch: string
         address: string
         dob: Date | null
         gender: string
         currentInstitute: string
-        currentClass: string
-        guardianName: string
-        guardianPhone: string
-        guardianOccupation: string
+        role: string
+        // Student-specific properties (only available when role is not TEACHER)
+        roll?: string
+        sscBatch?: string
+        currentClass?: string
+        guardianName?: string
+        guardianPhone?: string
+        guardianOccupation?: string
     }
 }

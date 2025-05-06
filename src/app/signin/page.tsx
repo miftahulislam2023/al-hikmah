@@ -15,10 +15,12 @@ async function authenticate(prevState: { error: string, success: boolean }, form
     try {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
+        const role = formData.get("role") as string;
 
         const result = await signIn("credentials", {
             email,
             password,
+            role,
             redirect: false,
         });
 
@@ -55,6 +57,8 @@ function SignInContent() {
             // Redirect based on role
             if (session.user.role === "ADMIN") {
                 router.push("/admin");
+            } else if (session.user.role === "TEACHER") {
+                router.push("/teacher");
             } else {
                 router.push("/profile");
             }
@@ -67,6 +71,8 @@ function SignInContent() {
             // Check user role and redirect accordingly
             if (session.user.role === "ADMIN") {
                 router.push("/admin");
+            } else if (session.user.role === "TEACHER") {
+                router.push("/teacher");
             } else {
                 router.push("/profile");
             }
@@ -107,6 +113,19 @@ function SignInContent() {
                         <div className="space-y-2">
                             <Label htmlFor="password">Password</Label>
                             <Input id="password" type="password" name="password" placeholder="••••••••" required />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="role">Sign in as</Label>
+                            <select
+                                id="role"
+                                name="role"
+                                className="w-full border-input flex h-9 rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                                defaultValue="USER"
+                            >
+                                <option value="USER">Student</option>
+                                <option value="TEACHER">Teacher</option>
+                            </select>
                         </div>
 
                         <SubmitButton />

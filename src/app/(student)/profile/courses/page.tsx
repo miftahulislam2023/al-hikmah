@@ -77,12 +77,6 @@ export default async function ViewCourses() {
                                                 <span className="text-gray-500">Course Fee</span>
                                                 <span className="font-semibold">৳ {course.fee}</span>
                                             </div>
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-gray-500 text-sm">Progress</span>
-                                                <div className="w-24 bg-gray-200 rounded-full h-2.5">
-                                                    <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: '65%' }}></div>
-                                                </div>
-                                            </div>
                                             <Link href={`/profile/courses/${course.id}`} className="block mt-4">
                                                 <Button className="w-full bg-blue-600 hover:bg-blue-700">
                                                     Continue Learning
