@@ -2,8 +2,9 @@
 import prisma from "@/lib/prisma";
 import { Class, Gender, Student, StudentResponse } from "@/lib/types";
 import { revalidatePath } from "next/cache";
+import { signUpStudent } from "./auth";
 
-export function generateRollNumber(sscBatch: number, studentClass: string, studentId: number) {
+function generateRollNumber(sscBatch: number, studentClass: string, studentId: number) {
     const classMapping: Record<string, string> = {
         "SIX": "06",
         "SEVEN": "07",
@@ -142,9 +143,6 @@ export async function updateStudent(formData: FormData): Promise<void> {
     }
 }
 
-/**
- * Enhanced student profile update function with better error handling and redirection
- */
 export async function updateStudentProfile(formData: FormData): Promise<void> {
     try {
         const id = formData.get("id");
@@ -238,5 +236,98 @@ export async function removeCourseFromStudent(studentId: number, courseId: numbe
         });
     } catch (e) {
         console.error("Error removing course:", e);
+    }
+}
+
+
+// Type for form state with values
+type SignUpFormState = {
+    error: string;
+    success: boolean;
+    values?: {
+        name?: string;
+        email?: string;
+        phone?: string;
+        address?: string;
+        dob?: string;
+        gender?: string;
+        currentInstitute?: string;
+        currentClass?: string;
+        sscBatch?: string;
+        guardianName?: string;
+        guardianPhone?: string;
+        guardianOccupation?: string;
+    };
+};
+
+// Server action for handling student registration using useActionState
+export async function signUpStudentAction(prevState: SignUpFormState, formData: FormData) {
+    try {
+        // Extract all form values to preserve them in case of error
+        const name = formData.get("name") as string | null;
+        const email = formData.get("email") as string;
+        const password = formData.get("password") as string;
+        const phone = formData.get("phone") as string | null;
+        const address = formData.get("address") as string | null;
+        const dob = formData.get("dob") as string | null;
+        const gender = formData.get("gender") as string | null;
+        const currentInstitute = formData.get("currentInstitute") as string | null;
+        const currentClass = formData.get("currentClass") as string | null;
+        const sscBatch = formData.get("sscBatch") as string | null;
+        const guardianName = formData.get("guardianName") as string | null;
+        const guardianPhone = formData.get("guardianPhone") as string | null;
+        const guardianOccupation = formData.get("guardianOccupation") as string | null;
+
+        // Create values object to preserve form state
+        const values = {
+            name: name || undefined,
+            email,
+            phone: phone || undefined,
+            address: address || undefined,
+            dob: dob || undefined,
+            gender: gender || undefined,
+            currentInstitute: currentInstitute || undefined,
+            currentClass: currentClass || undefined,
+            sscBatch: sscBatch || undefined,
+            guardianName: guardianName || undefined,
+            guardianPhone: guardianPhone || undefined,
+            guardianOccupation: guardianOccupation || undefined,
+        };
+
+        if (!email || !password) {
+            return { error: "Email and password are required", success: false, values };
+        }
+
+        if (password.length < 6) {
+            return { error: "Password must be at least 6 characters", success: false, values };
+        }
+
+        // Use the server action to register the student
+        const result = await signUpStudent(formData);
+
+        if (result && result.error) {
+            return { error: result.error, success: false, values };
+        }
+
+        // If we get here, assume success and don't need to return values
+        return { success: true, error: "" };
+    } catch (error) {
+        // Extract all form values to preserve them in case of error
+        const values = {
+            name: formData.get("name") as string || undefined,
+            email: formData.get("email") as string,
+            phone: formData.get("phone") as string || undefined,
+            address: formData.get("address") as string || undefined,
+            dob: formData.get("dob") as string || undefined,
+            gender: formData.get("gender") as string || undefined,
+            currentInstitute: formData.get("currentInstitute") as string || undefined,
+            currentClass: formData.get("currentClass") as string || undefined,
+            sscBatch: formData.get("sscBatch") as string || undefined,
+            guardianName: formData.get("guardianName") as string || undefined,
+            guardianPhone: formData.get("guardianPhone") as string || undefined,
+            guardianOccupation: formData.get("guardianOccupation") as string || undefined,
+        };
+        console.error("Registration error:", error);
+        return { error: "An unexpected error occurred", success: false, values };
     }
 }

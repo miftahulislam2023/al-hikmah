@@ -22,6 +22,7 @@ async function enrollInCourse(courseId: number, studentId: number) {
         // Redirect back to the same page to show updated enrollment status
         return { success: true, message: "Successfully enrolled in the course" };
     } catch (error) {
+        console.log(error);
         return { success: false, message: "Failed to enroll in the course" };
     }
 }

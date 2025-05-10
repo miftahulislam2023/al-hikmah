@@ -20,7 +20,7 @@ function generateRollNumber(sscBatch: number, studentClass: string, studentId: n
     return rollNumber;
 }
 
-export async function signupStudent(formData: FormData) {
+export async function signUpStudent(formData: FormData) {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const name = formData.get("name") as string | null;

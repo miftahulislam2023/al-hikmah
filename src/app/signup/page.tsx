@@ -7,44 +7,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { useRouter } from "next/navigation";
-import { useSession, SessionProvider } from "next-auth/react";
-import { useEffect } from "react";
+import { SessionProvider } from "next-auth/react";
 import Link from "next/link";
-import { signupStudent as signupStudentAction } from "@/actions/auth";
-// Use only for type annotations
-import type { Class, Gender } from "@/lib/types";
+import { signUpStudentAction } from "@/actions/student";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-// Server action for handling student registration
-async function signupStudent(prevState: { error: string, success: boolean }, formData: FormData) {
-    try {
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
-
-        if (!email || !password) {
-            return { error: "Email and password are required", success: false };
-        }
-
-        if (password.length < 6) {
-            return { error: "Password must be at least 6 characters", success: false };
-        }
-
-        // Use the server action to register the student
-        const result = await signupStudentAction(formData);
-
-        if (result && result.error) {
-            return { error: result.error, success: false };
-        }
-
-        // If we get here, assume success
-        return { success: true, error: "" };
-    } catch (error) {
-        console.error("Registration error:", error);
-        return { error: "An unexpected error occurred", success: false };
-    }
-}
-
-// Submit button with loading state
+// Submit button with loading state using useFormStatus
 function SubmitButton() {
     const { pending } = useFormStatus();
 
@@ -57,43 +26,36 @@ function SubmitButton() {
 
 function SignUpContent() {
     const router = useRouter();
-    const { data: session, status } = useSession();
-    const [state, formAction] = useActionState(signupStudent, {
+    const [state, formAction] = useActionState(signUpStudentAction, {
         error: "",
         success: false,
+        values: {
+            name: "",
+            email: "",
+            phone: "",
+            address: "",
+            dob: "",
+            gender: "",
+            currentInstitute: "",
+            currentClass: "",
+            sscBatch: "",
+            guardianName: "",
+            guardianPhone: "",
+            guardianOccupation: "",
+        }
     });
 
-    // Redirect if already signed in
-    useEffect(() => {
-        if (status === "authenticated" && session) {
-            // Redirect based on role
-            if (session.user.role === "ADMIN") {
-                router.push("/admin");
-            } else {
-                router.push("/profile");
-            }
-        }
-    }, [status, session, router]);
-
-    // Redirect after successful registration
+    // Redirect to signin page after successful registration
     useEffect(() => {
         if (state.success) {
-            router.push("/signin");
+            // Delay redirect slightly to show success message
+            const timeout = setTimeout(() => {
+                router.push('/signin');
+            }, 2000);
+
+            return () => clearTimeout(timeout);
         }
     }, [state.success, router]);
-
-    // Show loading state while checking authentication status
-    if (status === "loading") {
-        return (
-            <div className="flex justify-center items-center min-h-screen">
-                <p>Loading...</p>
-            </div>
-        );
-    }
-
-    // Calculate current year for SSC batch dropdown
-    const currentYear = new Date().getFullYear();
-    const batchYears = Array.from({ length: 10 }, (_, i) => currentYear + i - 5);
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
@@ -105,107 +67,108 @@ function SignUpContent() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form action={formAction} className="space-y-4">
-                        {state.error && (
-                            <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-                                {state.error}
-                            </div>
-                        )}
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {/* Basic Information */}
-                            <div className="space-y-2">
-                                <Label htmlFor="name">Full Name</Label>
-                                <Input id="name" name="name" placeholder="Full Name" />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="email">Email</Label>
-                                <Input id="email" type="email" name="email" placeholder="your.email@example.com" required />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="password">Password</Label>
-                                <Input id="password" type="password" name="password" placeholder="••••••••" required />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="phone">Phone Number</Label>
-                                <Input id="phone" name="phone" placeholder="Phone Number" />
-                            </div>
-
-                            <div className="space-y-2 md:col-span-2">
-                                <Label htmlFor="address">Address</Label>
-                                <Input id="address" name="address" placeholder="Address" />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="dob">Date of Birth</Label>
-                                <Input id="dob" type="date" name="dob" />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="gender">Gender</Label>
-                                <Select name="gender">
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select gender" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="MALE">Male</SelectItem>
-                                        <SelectItem value="FEMALE">Female</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-
-                            {/* Educational Information */}
-                            <div className="space-y-2">
-                                <Label htmlFor="currentInstitute">Current Institute</Label>
-                                <Input id="currentInstitute" name="currentInstitute" placeholder="Current Institute" />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="currentClass">Current Class</Label>
-                                <Select name="currentClass">
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select class" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="SIX">Six</SelectItem>
-                                        <SelectItem value="SEVEN">Seven</SelectItem>
-                                        <SelectItem value="EIGHT">Eight</SelectItem>
-                                        <SelectItem value="NINE">Nine</SelectItem>
-                                        <SelectItem value="TEN">Ten</SelectItem>
-                                        <SelectItem value="ELEVEN">Eleven</SelectItem>
-                                        <SelectItem value="TWELVE">Twelve</SelectItem>
-                                        <SelectItem value="OTHER">Other</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label>SSC Batch</Label>
-                                <Input id="sscBatch" type="text" name="sscBatch" placeholder="Enter SSC batch year (e.g., 22)" required />
-                            </div>
-
-                            {/* Guardian Information */}
-                            <div className="space-y-2">
-                                <Label htmlFor="guardianName">Guardian Name</Label>
-                                <Input id="guardianName" name="guardianName" placeholder="Guardian Name" />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="guardianPhone">Guardian Phone</Label>
-                                <Input id="guardianPhone" name="guardianPhone" placeholder="Guardian Phone" />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="guardianOccupation">Guardian Occupation</Label>
-                                <Input id="guardianOccupation" name="guardianOccupation" placeholder="Guardian Occupation" />
-                            </div>
+                    {state.success ? (
+                        <div className="p-3 bg-green-100 border border-green-400 text-green-700 rounded mb-4">
+                            Account created successfully! Redirecting to sign in page...
                         </div>
+                    ) : (
+                        <form action={formAction} className="space-y-4">
+                            {state.error && (
+                                <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                                    {state.error}
+                                </div>
+                            )}<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {/* Basic Information */}                                <div className="space-y-2">
+                                    <Label htmlFor="name">Full Name</Label>
+                                    <Input id="name" name="name" placeholder="Full Name" required defaultValue={state.values?.name || ""} />
+                                </div>
 
-                        <SubmitButton />
-                    </form>
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">Email</Label>
+                                    <Input id="email" type="email" name="email" placeholder="your.email@example.com" required defaultValue={state.values?.email || ""} />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="password">Password</Label>
+                                    <Input id="password" type="password" name="password" placeholder="••••••••" required />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="phone">Phone Number</Label>
+                                    <Input id="phone" name="phone"  type="number" placeholder="Phone Number" required defaultValue={state.values?.phone || ""} />
+                                </div>
+
+                                <div className="space-y-2 md:col-span-2">
+                                    <Label htmlFor="address">Address</Label>
+                                    <Input id="address" name="address" placeholder="Address" required defaultValue={state.values?.address || ""} />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="dob">Date of Birth</Label>
+                                    <Input id="dob" type="date" name="dob" required defaultValue={state.values?.dob || ""} />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="gender">Gender</Label>
+                                    <Select name="gender" defaultValue={state.values?.gender || ""} required>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select gender" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="MALE">Male</SelectItem>
+                                            <SelectItem value="FEMALE">Female</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                {/* Educational Information */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="currentInstitute">Current Institute</Label>
+                                    <Input id="currentInstitute" name="currentInstitute" placeholder="Current Institute" required defaultValue={state.values?.currentInstitute || ""} />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="currentClass">Current Class</Label>
+                                    <Select name="currentClass" defaultValue={state.values?.currentClass || ""} required>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select class" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="SIX">Six</SelectItem>
+                                            <SelectItem value="SEVEN">Seven</SelectItem>
+                                            <SelectItem value="EIGHT">Eight</SelectItem>
+                                            <SelectItem value="NINE">Nine</SelectItem>
+                                            <SelectItem value="TEN">Ten</SelectItem>
+                                            <SelectItem value="ELEVEN">Eleven</SelectItem>
+                                            <SelectItem value="TWELVE">Twelve</SelectItem>
+                                            <SelectItem value="OTHER">Other</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label>SSC Batch</Label>
+                                    <Input id="sscBatch" type="number" name="sscBatch" placeholder="Enter SSC batch year (e.g., 22)" required defaultValue={state.values?.sscBatch || ""} />
+                                </div>
+
+                                {/* Guardian Information */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="guardianName">Guardian Name</Label>
+                                    <Input id="guardianName" name="guardianName" placeholder="Guardian Name" required defaultValue={state.values?.guardianName || ""} />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="guardianPhone">Guardian Phone</Label>
+                                    <Input id="guardianPhone" name="guardianPhone" type="number" placeholder="Guardian Phone" required defaultValue={state.values?.guardianPhone || ""} />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="guardianOccupation">Guardian Occupation</Label>
+                                    <Input id="guardianOccupation" name="guardianOccupation" placeholder="Guardian Occupation" required defaultValue={state.values?.guardianOccupation || ""} />
+                                </div>
+                            </div>                        <SubmitButton />
+                        </form>
+                    )}
                 </CardContent>
                 <CardFooter className="flex justify-center">
                     <p className="text-sm text-muted-foreground">
