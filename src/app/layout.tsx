@@ -1,18 +1,30 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Poppins } from 'next/font/google'
-import { Hind_Siliguri } from 'next/font/google'
+import localFont from 'next/font/local'
+
+
+const solaimanlipi = localFont({
+  src: [
+    {
+      path: '../../public/fonts/SolaimanLipi_22-02-2012.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/SolaimanLipi_Bold_10-03-12.ttf',
+      weight: '700',
+      style: 'normal',
+    }
+  ],
+  variable: '--font-solaimanlipi',
+})
+
 
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-poppins',
-})
-
-const hindSiliguri = Hind_Siliguri({
-  subsets: ['bengali'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-hind-siliguri',
 })
 
 export const metadata: Metadata = {
@@ -30,7 +42,7 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </head>
-      <body className={`${poppins.variable} ${hindSiliguri.variable} font-bengali`}>
+      <body className={`${poppins.variable} ${solaimanlipi.variable} font-bengali`}>
         {children}
       </body>
     </html>

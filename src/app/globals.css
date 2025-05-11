@@ -213,3 +213,9 @@
     animation: float-mobile 5s ease-in-out infinite;
   }
 }
+
+/* Font class for SolaimanLipi */
+
+.font-solaimanlipi {
+  font-family: var(--font-solaimanlipi);
+}

@@ -1,15 +1,26 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Hind_Siliguri } from 'next/font/google';
+import localFont from 'next/font/local';
 
-const hindSiliguri = Hind_Siliguri({
-  subsets: ['bengali'],
-  weight: ['300', '400', '500', '600', '700'],
-});
+const solaimanlipi = localFont({
+  src: [
+    {
+      path: '../../public/fonts/SolaimanLipi_22-02-2012.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/SolaimanLipi_Bold_10-03-12.ttf',
+      weight: '700',
+      style: 'normal',
+    }
+  ],
+  variable: '--font-solaimanlipi',
+})
 
 export default function Home() {
   return (
-    <main className={`flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-12 bg-gradient-to-br  from-blue-300  ${hindSiliguri.className} overflow-x-hidden relative`}>
+    <main className={`flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-12 bg-gradient-to-br from-blue-300 ${solaimanlipi.variable} font-solaimanlipi overflow-x-hidden relative`}>
       {/* Floating educational elements - made more playful */}
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[8%] left-[2%] w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-yellow-300 to-yellow-400 opacity-90 rounded-2xl rotate-12 animate-float shadow-lg" style={{ animationDelay: '0s' }}>
@@ -81,12 +92,10 @@ export default function Home() {
         </div>
       </div>
       {/* Hero Section with animated elements */}
-      <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center mt-8 md:mt-16 mb-8 text-center relative">
-
-        <div className="relative bg-white/40 backdrop-blur-md px-8 py-6 rounded-2xl shadow-xl mb-2 transform hover:scale-105 transition-transform duration-300">
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-indigo-900 mb-4">আল-হিকমাহ একাডেমি</h1>
-          <p className="text-lg md:text-2xl text-indigo-800 max-w-3xl px-4 font-medium">আপনার শিক্ষা যাত্রা শুরু করুন আমাদের অনলাইন প্লাটফর্মে</p>
-        </div>
+      <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center mt-8 md:mt-16 mb-8 text-center relative">        <div className="relative bg-white/40 backdrop-blur-md px-8 py-6 rounded-2xl shadow-xl mb-2 transform hover:scale-105 transition-transform duration-300">
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-indigo-900 mb-4">আল-হিকমাহ একাডেমি</h1>
+        <p className="text-lg md:text-2xl text-indigo-800 max-w-3xl px-4 font-medium">আপনার শিক্ষা যাত্রা শুরু করুন আমাদের অনলাইন প্লাটফর্মে</p>
+      </div>
       </div>      {/* Course Details Section - Center of page with fun design */}
       <div className="w-full max-w-4xl mx-auto bg-white/90 backdrop-blur-md rounded-3xl shadow-xl p-6 md:p-8 mb-10 relative z-10 border-4 border-indigo-200">
         {/* Decorative floating elements */}
