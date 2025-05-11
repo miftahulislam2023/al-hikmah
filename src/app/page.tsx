@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import localFont from 'next/font/local';
+import MobileNavbar from "@/components/MobileNavbar";
+import LandingNavbar from "@/components/LandingNavbar";
 
 const solaimanlipi = localFont({
   src: [
@@ -21,6 +23,12 @@ const solaimanlipi = localFont({
 export default function Home() {
   return (
     <main className={`flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-12 bg-gradient-to-br from-blue-300 ${solaimanlipi.variable} font-solaimanlipi overflow-x-hidden relative`}>
+      {/* Mobile Navbar - only visible on small screens */}
+      <MobileNavbar />
+
+      {/* Desktop Navbar - only visible on medium and large screens */}
+      <LandingNavbar />
+
       {/* Floating educational elements - made more playful */}
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[8%] left-[2%] w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-yellow-300 to-yellow-400 opacity-90 rounded-2xl rotate-12 animate-float shadow-lg" style={{ animationDelay: '0s' }}>
@@ -90,14 +98,12 @@ export default function Home() {
         <div className="absolute top-[95%] left-[35%] w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-indigo-200 to-indigo-300 opacity-90 rounded-2xl -rotate-12 animate-float shadow-lg" style={{ animationDelay: '2.5s' }}>
           <div className="flex items-center justify-center h-full text-xl md:text-2xl">🔍</div>
         </div>
-      </div>
-      {/* Hero Section with animated elements */}
-      <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center mt-8 md:mt-16 mb-8 text-center relative">        <div className="relative bg-white/40 backdrop-blur-md px-8 py-6 rounded-2xl shadow-xl mb-2 transform hover:scale-105 transition-transform duration-300">
+      </div>      {/* Hero Section with animated elements */}
+      <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center mt-8 pt-16 md:mt-16 md:pt-10 mb-8 text-center relative">        <div className="relative bg-white/40 backdrop-blur-md px-8 py-6 rounded-2xl shadow-xl mb-2 transform hover:scale-105 transition-transform duration-300">
         <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-indigo-900 mb-4">আল-হিকমাহ একাডেমি</h1>
-        <p className="text-lg md:text-2xl text-indigo-800 max-w-3xl px-4 font-medium">আপনার শিক্ষা যাত্রা শুরু করুন আমাদের অনলাইন প্লাটফর্মে</p>
-      </div>
+        <p className="text-lg md:text-2xl text-indigo-800 max-w-3xl px-4 font-medium">আপনার শিক্ষা যাত্রা শুরু করুন আমাদের অনলাইন প্লাটফর্মে</p>      </div>
       </div>      {/* Course Details Section - Center of page with fun design */}
-      <div className="w-full max-w-4xl mx-auto bg-white/90 backdrop-blur-md rounded-3xl shadow-xl p-6 md:p-8 mb-10 relative z-10 border-4 border-indigo-200">
+      <div id="courses" className="w-full max-w-4xl mx-auto bg-white/90 backdrop-blur-md rounded-3xl shadow-xl p-6 md:p-8 mb-10 relative z-10 border-4 border-indigo-200">
         {/* Decorative floating elements */}
         <div className="absolute -top-8 -left-8 w-16 h-16 bg-gradient-to-br from-green-400 to-green-500 opacity-95 rounded-full flex items-center justify-center transform rotate-12 border-4 border-white shadow-lg animate-float" style={{ animationDelay: '0.5s' }}>
           <span className="text-3xl">🚀</span>
@@ -171,10 +177,8 @@ export default function Home() {
                 </div>
               </div>
               <p className="mt-4 text-lg bg-yellow-100 p-2 rounded-lg text-center">তবে সকল বয়সী শিক্ষার্থীদের জন্য উভয় কোর্স উন্মুক্ত থাকবে।</p>
-            </div>
-
-            <div className="mb-8 bg-gradient-to-r from-red-50 to-orange-50 p-4 rounded-xl shadow-md">
-              <h3 className="text-xl font-bold mb-3 flex items-center bg-red-600 text-white py-2 px-4 rounded-lg">
+            </div>            <div className="mb-8 bg-gradient-to-r from-red-50 to-orange-50 p-4 rounded-xl shadow-md">
+              <h3 id="fees" className="text-xl font-bold mb-3 flex items-center bg-red-600 text-white py-2 px-4 rounded-lg">
                 <span className="text-2xl mr-2">💰</span> ৫. কোর্স ফি
               </h3>
               <p className="mb-4 text-lg">উচ্চমানের শিক্ষা সবার জন্য সহজলভ্য করতে আমাদের ফি রাখা হয়েছে অত্যন্ত কম:</p>

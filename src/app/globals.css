@@ -219,3 +219,69 @@
 .font-solaimanlipi {
   font-family: var(--font-solaimanlipi);
 }
+
+/* Mobile menu styles */
+.mobile-menu-container {
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-container button {
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+  animation: gentle-pulse 3s infinite;
+}
+
+@keyframes gentle-pulse {
+  0% {
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.6);
+  }
+
+  100% {
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+  }
+}
+
+.mobile-menu-container button:hover {
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+  animation: none;
+}
+
+.menu-scrolled {
+  transform: scale(0.9);
+}
+
+/* Landing navbar styles */
+@keyframes navGlow {
+  0% {
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+  }
+
+  50% {
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.2);
+  }
+
+  100% {
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+  }
+}
+
+nav button:hover {
+  animation: none;
+  transform: translateY(-2px);
+}
+
+/* Fun hover effect for menu items */
+@media (hover: hover) {
+
+  .mobile-menu-container a:hover span:first-child,
+  .mobile-menu-container button:hover span:first-child,
+  nav a:not(.logo-link):hover span:first-child,
+  nav button:hover span:first-child {
+    display: inline-block;
+    transform: scale(1.2) rotate(2deg);
+    transition: transform 0.3s ease;
+  }
+}
