@@ -3,84 +3,47 @@
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 
 export default function StudentNavbar() {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const toggleMenu = () => setIsMenuOpen((v) => !v);
     return (
-        <nav className="bg-white shadow-md">
+        <nav className="bg-white shadow-md sticky top-0 z-30">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16">
-                    <div className="flex">
-                        <div className="flex-shrink-0 flex items-center">
-                            <Link href="/" className="text-xl font-bold text-blue-600">
-                                Al-Hikmah
-                            </Link>
-                        </div>
-                        <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                            <Link
-                                href="/profile"
-                                className="border-transparent text-gray-600 hover:border-blue-500 hover:text-blue-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                            >
-                                Profile
-                            </Link>
-                            <Link
-                                href="/profile/edit"
-                                className="border-transparent text-gray-600 hover:border-blue-500 hover:text-blue-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                            >
-                                Edit
-                            </Link>
-                            <Link
-                                href="/profile/courses"
-                                className="border-transparent text-gray-600 hover:border-blue-500 hover:text-blue-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                            >
-                                Courses
-                            </Link>
-                            {/* Add more navigation links as needed */}
-                        </div>
-                    </div>
-                    <div className="hidden sm:ml-6 sm:flex sm:items-center">
-                        <Button
-                            onClick={() => signOut({ callbackUrl: "/signin" })}
-                            variant="destructive"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4 mr-0.5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                                />
-                            </svg>
-                            Sign Out
-                        </Button>
-                    </div>
-                    <div className="flex items-center justify-between gap-x-4 sm:hidden">
-                        <Link
-                            href="/profile"
-                            className="border-transparent text-gray-600 hover:border-blue-500 hover:text-blue-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                        >
-                            Profile
+                <div className="flex justify-between h-16 items-center">
+                    <div className="flex items-center gap-2">
+                        <Link href="/" className="text-xl font-bold text-blue-600 flex items-center">
+                            <span className="mr-2">🏫</span>
+                            <span className="hidden sm:inline">Al-Hikmah School</span>
+                            <span className="sm:hidden">Al-Hikmah</span>
                         </Link>
-                        <Link
-                            href="/profile/courses"
-                            className="border-transparent text-gray-600 hover:border-blue-500 hover:text-blue-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                        >
-                            Courses
-                        </Link>
-                        <Button
-                            onClick={() => signOut({ callbackUrl: "/signin" })}
-                            variant="destructive"
-                        >
-                            Sign Out
-                        </Button>
+                    </div>
+                    {/* Desktop Nav */}
+                    <div className="hidden sm:flex items-center gap-4">
+                        <Link href="/profile" className="text-gray-700 hover:text-blue-600 font-medium px-2 py-1 rounded transition">Profile</Link>
+                        <Link href="/profile/edit" className="text-gray-700 hover:text-blue-600 font-medium px-2 py-1 rounded transition">Edit</Link>
+                        <Link href="/profile/courses" className="text-gray-700 hover:text-blue-600 font-medium px-2 py-1 rounded transition">Courses</Link>
+                        <Button onClick={() => signOut({ callbackUrl: "/signin" })} variant="destructive" className="ml-2">Sign Out</Button>
+                    </div>
+                    {/* Mobile Hamburger */}
+                    <div className="sm:hidden flex items-center">
+                        <button onClick={toggleMenu} className="p-2 rounded-md text-blue-600 focus:outline-none">
+                            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                        </button>
                     </div>
                 </div>
             </div>
+            {/* Mobile Menu */}
+            {isMenuOpen && (
+                <div className="sm:hidden bg-blue-50 border-t border-blue-100 px-4 py-3 space-y-2 animate-in fade-in slide-in-from-top-2">
+                    <Link href="/profile" className="block text-blue-700 font-medium py-2 rounded hover:bg-blue-100" onClick={toggleMenu}>Profile</Link>
+                    <Link href="/profile/edit" className="block text-blue-700 font-medium py-2 rounded hover:bg-blue-100" onClick={toggleMenu}>Edit</Link>
+                    <Link href="/profile/courses" className="block text-blue-700 font-medium py-2 rounded hover:bg-blue-100" onClick={toggleMenu}>Courses</Link>
+                    <Button onClick={() => { setIsMenuOpen(false); signOut({ callbackUrl: "/signin" }); }} variant="destructive" className="w-full">Sign Out</Button>
+                </div>
+            )}
         </nav>
     );
 }

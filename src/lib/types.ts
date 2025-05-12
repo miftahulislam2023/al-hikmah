@@ -77,3 +77,12 @@ export interface StudentResponse {
     updatedAt?: Date;
     courses?: Course[];
 }
+
+export interface Lecture {
+    id: number;
+    title: string;
+    description: string;
+    createdAt: Date | string;
+    updatedAt: Date | string;
+    courseId?: number;
+}

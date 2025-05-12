@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { LayoutDashboard, UserCog, BookOpen, Menu, X } from "lucide-react";
+import { signOut } from "next-auth/react";
 
 export default function TeacherNavBar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,6 +48,12 @@ export default function TeacherNavBar() {
                                 <span>Profile</span>
                             </Link>
                         </div>
+                        <button
+                            onClick={() => signOut({ callbackUrl: "/signin" })}
+                            className="ml-4 px-3 py-2 rounded-md bg-red-600 hover:bg-red-700 text-white text-sm font-medium transition-colors duration-200"
+                        >
+                            Sign Out
+                        </button>
                     </div>
 
                     {/* Mobile menu button */}
@@ -88,6 +95,12 @@ export default function TeacherNavBar() {
                         <UserCog size={18} />
                         <span>Profile</span>
                     </Link>
+                    <button
+                        onClick={() => { setIsMenuOpen(false); signOut({ callbackUrl: "/signin" }); }}
+                        className="w-full flex items-center justify-center py-2 px-3 rounded-md bg-red-600 hover:bg-red-700 text-white text-sm font-medium transition-colors duration-200 mt-2"
+                    >
+                        Sign Out
+                    </button>
                 </div>
             )}
         </nav>
