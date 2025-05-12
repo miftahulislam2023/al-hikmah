@@ -7,6 +7,8 @@ import { formatDate } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Lecture } from "@/lib/types";
+import Form from "next/form";
+import { Input } from "@/components/ui/input";
 
 export default async function CourseLecturesPage({ params }: { params: { courseId: string } }) {
     const session = await auth();
@@ -17,7 +19,7 @@ export default async function CourseLecturesPage({ params }: { params: { courseI
         return <div className="text-red-600 text-center mt-10">{error}</div>;
     }
 
-    const courseId = Number(params.courseId);
+    const courseId = Number((await params).courseId);
     const { data: lectures, error: lectureError } = await getLecturesByCourse(courseId);
 
     async function handleAddLecture(formData: FormData) {
@@ -71,10 +73,10 @@ export default async function CourseLecturesPage({ params }: { params: { courseI
                                         <Link href={`/teacher/courses/${courseId}/${lecture.id}`}>
                                             <Button variant="outline" size="sm">Edit</Button>
                                         </Link>
-                                        <form action={handleDeleteLecture} method="post" onSubmit={e => { if (!confirm('Delete this lecture?')) e.preventDefault(); }}>
-                                            <input type="hidden" name="lectureId" value={lecture.id} />
+                                        <Form action={handleDeleteLecture} >
+                                            <Input type="hidden" name="lectureId" value={lecture.id} />
                                             <Button type="submit" variant="destructive" size="sm">Delete</Button>
-                                        </form>
+                                        </Form>
                                     </div>
                                 </li>
                             ))}
