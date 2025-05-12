@@ -16,6 +16,24 @@ export type Gender = PrismaGender;
 export type Class = PrismaClass;
 export type Role = PrismaRole;
 
+export interface Teacher {
+    id: number;
+    name: string | null;
+    email: string;
+    phone: string | null;
+    address: string | null;
+    dob: Date | null;
+    gender: Gender | null;
+    currentInstitute: string | null;
+    role: Role;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export interface TeacherWithCourses extends Teacher {
+    courses: Course[];
+}
+
 export interface Student {
     id: number;
     name: string | null;
