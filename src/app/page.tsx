@@ -191,7 +191,7 @@ export default function Home() {
                 <div className="bg-white/80 rounded-xl p-4 shadow-sm flex-1 border-2 border-purple-200 text-center transform hover:scale-105 transition-transform duration-300">
                   <div className="font-bold text-lg mb-2 bg-purple-600 text-white py-1 rounded-lg">উচ্চ মাধ্যমিক/কলেজ স্তর (১০–১২)</div>
                   <div className="text-2xl font-bold text-purple-800">প্রতি মাস</div>
-                  <div className="text-4xl font-bold text-purple-800 my-2">মাত্র ৪৯৯ টাকা</div>
+                  <div className="text-4xl font-bold text-purple-800 my-2">মাত্র ২৪৯ টাকা</div>
                 </div>
               </div>
             </div>
