@@ -100,7 +100,7 @@ export default function Home() {
         </div>
       </div>      {/* Hero Section with animated elements */}
       <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center mt-8 pt-16 md:mt-16 md:pt-10 mb-8 text-center relative">        <div className="relative bg-white/40 backdrop-blur-md px-8 py-6 rounded-2xl shadow-xl mb-2 transform hover:scale-105 transition-transform duration-300">
-        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-indigo-900 mb-4">আল-হিকমাহ একাডেমি</h1>
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-indigo-900 mb-4">নিউরাল জেম</h1>
         <p className="text-lg md:text-2xl text-indigo-800 max-w-3xl px-4 font-medium">আপনার শিক্ষা যাত্রা শুরু করুন আমাদের অনলাইন প্লাটফর্মে</p>      </div>
       </div>      {/* Course Details Section - Center of page with fun design */}
       <div id="courses" className="w-full max-w-4xl mx-auto bg-white/90 backdrop-blur-md rounded-3xl shadow-xl p-6 md:p-8 mb-10 relative z-10 border-4 border-indigo-200">
