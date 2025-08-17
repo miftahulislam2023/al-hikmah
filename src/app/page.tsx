@@ -185,13 +185,13 @@ export default function Home() {
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="bg-white/80 rounded-xl p-4 shadow-sm flex-1 border-2 border-blue-200 text-center transform hover:scale-105 transition-transform duration-300">
                   <div className="font-bold text-lg mb-2 bg-blue-600 text-white py-1 rounded-lg">মাধ্যমিক/স্কুল স্তর (৭–১০)</div>
-                  <div className="text-2xl font-bold text-blue-800">প্রতি সেমিস্টার</div>
+                  <div className="text-2xl font-bold text-blue-800">প্রতি মাস</div>
                   <div className="text-4xl font-bold text-purple-800 my-2">মাত্র ১৯৯ টাকা</div>
                 </div>
                 <div className="bg-white/80 rounded-xl p-4 shadow-sm flex-1 border-2 border-purple-200 text-center transform hover:scale-105 transition-transform duration-300">
                   <div className="font-bold text-lg mb-2 bg-purple-600 text-white py-1 rounded-lg">উচ্চ মাধ্যমিক/কলেজ স্তর (১০–১২)</div>
-                  <div className="text-2xl font-bold text-purple-800">প্রতি সেমিস্টার</div>
-                  <div className="text-4xl font-bold text-purple-800 my-2">মাত্র ২৯৯ টাকা</div>
+                  <div className="text-2xl font-bold text-purple-800">প্রতি মাস</div>
+                  <div className="text-4xl font-bold text-purple-800 my-2">মাত্র ২৪৯ টাকা</div>
                 </div>
               </div>
             </div>
