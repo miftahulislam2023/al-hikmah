@@ -28,8 +28,8 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: "Al-Hikmah Academy",
-  description: "Coding Academy",
+  title: "Neural Gem Academy",
+  description: "Connecting the Neurons",
 };
 
 export default function RootLayout({

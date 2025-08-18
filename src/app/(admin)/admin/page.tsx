@@ -5,7 +5,7 @@ export default async function AdminHome() {
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-8">
             <Card className="w-full max-w-lg shadow-lg">
                 <CardHeader className="text-center">
-                    <CardTitle className="text-2xl font-bold text-gray-800">Welcome to Al-Hikmah Academy</CardTitle>
+                    <CardTitle className="text-2xl font-bold text-gray-800">Welcome to Neural Gem Academy</CardTitle>
                     <CardDescription className="text-xl text-gray-600 mt-2">Admin Control Panel</CardDescription>
                 </CardHeader>
                 <CardContent>

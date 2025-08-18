@@ -52,7 +52,7 @@ const LandingNavbar = () => {
                     />
                     <div className="text-lg md:text-xl">
                         <span className="">
-                            আল-হিকমাহ একাডেমি
+                            Neural Gem Academy
                         </span>
                     </div>
                 </Link>

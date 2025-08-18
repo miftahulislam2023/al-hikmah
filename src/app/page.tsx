@@ -100,8 +100,8 @@ export default function Home() {
         </div>
       </div>      {/* Hero Section with animated elements */}
       <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center mt-8 pt-16 md:mt-16 md:pt-10 mb-8 text-center relative">        <div className="relative bg-white/40 backdrop-blur-md px-8 py-6 rounded-2xl shadow-xl mb-2 transform hover:scale-105 transition-transform duration-300">
-        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-indigo-900 mb-4">নিউরাল জেম</h1>
-        <p className="text-lg md:text-2xl text-indigo-800 max-w-3xl px-4 font-medium">আপনার শিক্ষা যাত্রা শুরু করুন আমাদের অনলাইন প্লাটফর্মে</p>      </div>
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-indigo-900 mb-4">Neural Gem</h1>
+        <p className="text-lg md:text-2xl text-indigo-800 max-w-3xl px-4 font-medium">Connecting the Neurons</p>      </div>
       </div>      {/* Course Details Section - Center of page with fun design */}
       <div id="courses" className="w-full max-w-4xl mx-auto bg-white/90 backdrop-blur-md rounded-3xl shadow-xl p-6 md:p-8 mb-10 relative z-10 border-4 border-indigo-200">
         {/* Decorative floating elements */}
@@ -120,7 +120,7 @@ export default function Home() {
 
         <div className="pt-8 pb-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text">
-            আল-হিকমাহ একাডেমি কর্তৃক পরিচালিত, মাধ্যমিক ও উচ্চ মাধ্যমিক স্কুল ও কলেজ ছাত্র-ছাত্রীদের জন্য কোডিং ও প্রোগ্রামিং ল্যাংগুয়েজ কোর্স
+            Neural Gem Academy কর্তৃক পরিচালিত, মাধ্যমিক ও উচ্চ মাধ্যমিক স্কুল ও কলেজ ছাত্র-ছাত্রীদের জন্য কোডিং ও প্রোগ্রামিং ল্যাংগুয়েজ কোর্স
           </h2>
 
           <div className="text-indigo-900">
@@ -286,7 +286,7 @@ export default function Home() {
       {/* Footer - positioned at bottom with fun style */}
       <div className="w-full text-center pb-4 pt-2 mt-auto">
         <div className="text-xs md:text-sm text-indigo-900 px-6 mx-auto bg-white/50 backdrop-blur-md py-4 rounded-2xl max-w-sm border-2 border-indigo-200 shadow-lg">
-          <p className="font-medium">আল-হিকমাহ একাডেমি</p>
+          <p className="font-medium">Neural Gem Academy</p>
           <p className="mb-2">
             <a href="https://www.facebook.com/alhikmahacademybd"
               className="text-indigo-600 hover:text-indigo-800 underline break-words font-medium"
@@ -294,7 +294,7 @@ export default function Home() {
               facebook.com/alhikmahacademybd
             </a>
           </p>
-          <p>© {new Date().getFullYear()} আল-হিকমাহ একাডেমি। সর্বস্বত্ব সংরক্ষিত।</p>
+          <p>© {new Date().getFullYear()} Neural Gem Academy। সর্বস্বত্ব সংরক্ষিত।</p>
         </div>
       </div>
     </main>

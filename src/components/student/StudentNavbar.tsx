@@ -16,8 +16,8 @@ export default function StudentNavbar() {
                     <div className="flex items-center gap-2">
                         <Link href="/" className="text-xl font-bold text-blue-600 flex items-center">
                             <span className="mr-2">🏫</span>
-                            <span className="hidden sm:inline">Al-Hikmah School</span>
-                            <span className="sm:hidden">Al-Hikmah</span>
+                            <span className="hidden sm:inline">Neural Gem School</span>
+                            <span className="sm:hidden">Neural Gem</span>
                         </Link>
                     </div>
                     {/* Desktop Nav */}

@@ -11,7 +11,7 @@ export default async function StudentProfile() {
                 <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-6">
                     <div className="bg-gradient-to-r from-blue-600 to-indigo-600 pt-8 pb-16 px-8 relative">
                         <h1 className="text-3xl font-bold text-white mb-1">Student Profile</h1>
-                        <p className="text-blue-100">Al-Hikmah Academy</p>
+                        <p className="text-blue-100">Neural Gem Academy</p>
 
                         {/* Decorative Elements */}
                         <div className="absolute top-0 right-0 w-48 h-48 bg-white opacity-10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
@@ -171,7 +171,7 @@ export default async function StudentProfile() {
                     <p className="text-blue-200 mt-2">- Nelson Mandela</p>
                 </div>
                 <div className="mt-8 text-center text-gray-500 text-sm">
-                    <p>Al-Hikmah Academy Student Portal • 2025</p>
+                    <p>Neural Gem Academy Student Portal • 2025</p>
                 </div>
             </div>
         </div>

@@ -132,7 +132,7 @@ const MobileNavbar = () => {
                                     animate={{ x: 0, opacity: 1 }}
                                     transition={{ delay: 0.15 }}
                                 >
-                                    আল-হিকমাহ একাডেমি
+                                    Neural Gem Academy
                                 </motion.div>
                                 <div className="h-0.5 w-full bg-gradient-to-r from-indigo-200 to-purple-200 rounded-full mb-2"></div>
                             </div>              <motion.div
@@ -250,7 +250,7 @@ const MobileNavbar = () => {
                                     animate={{ opacity: 1 }}
                                     transition={{ delay: 0.55 }}
                                 >
-                                    আল-হিকমাহ একাডেমি © {new Date().getFullYear()}
+                                    Neural Gem Academy © {new Date().getFullYear()}
                                 </motion.div>              </div>
                         </div>
                     </motion.div>

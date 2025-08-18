@@ -36,7 +36,7 @@ export default function AdminNavbar() {
                         <span className="text-white text-lg font-bold">A</span>
                     </div>
                     <h1 className="text-xl font-bold bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">
-                        Al-Hikmah <span className="text-yellow-400">Admin</span>
+                        Neural Gem<span className="text-yellow-400">Admin</span>
                     </h1>
                 </div>
 
