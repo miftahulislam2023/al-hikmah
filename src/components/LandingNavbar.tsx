@@ -21,39 +21,38 @@ const LandingNavbar = () => {
     }, []);
 
     return (<motion.nav
-        className={`hidden md:block fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-lg py-2'
-            : 'bg-white/30 backdrop-blur-sm py-3'
+        className={`hidden md:block fixed top-0 left-0 right-0 z-40 transition-all duration-300 border-b ${scrolled
+            ? 'bg-white/95 backdrop-blur-md shadow-lg py-2 border-[#fd2d61]/30'
+            : 'bg-white/90 backdrop-blur-sm py-3 border-[#fd2d61]/20'
             }`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
     >
-        {/* Subtle gradient light effect when scrolled */}
-        {scrolled && (
-            <motion.div
-                className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent"
-                initial={{ scaleX: 0, opacity: 0 }}
-                animate={{ scaleX: 1, opacity: 1 }}
-                transition={{ delay: 0.2 }}
-            />
-        )}
+        {/* Subtle gradient light effect - always present but changes intensity */}
+        <motion.div
+            className={`absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent to-transparent ${scrolled
+                ? 'via-[#fd2d61]/70'
+                : 'via-[#fd2d61]/40'
+                }`}
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+        />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">                {/* Logo and brand */}                <div className="flex items-center">
                 <Link
                     href="/"
-                    className="flex items-center space-x-2 text-indigo-800 font-bold logo-link"
+                    className="flex items-center space-x-2 text-[#fd2d61] font-bold logo-link"
                 >
-                    <Image
-                        src="/logo/logo.png"
-                        width={50}
-                        height={50}
-                        alt="Picture of the author"
-                    />
-                    <div className="text-lg md:text-xl">
-                        <span className="">
-                            Neural Gem Academy
-                        </span>
+                    <div className="relative h-[80px] w-[300px]">
+                        <Image
+                            src="/logo/logo.png"
+                            alt="Neural Gem logo"
+                            fill
+                            className="object-cover"
+                            priority
+                        />
                     </div>
                 </Link>
             </div>
@@ -80,7 +79,7 @@ const LandingNavbar = () => {
                         <span>ফেসবুক</span>
                     </NavLink>
                     <div className="flex gap-3 ml-4">                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 300, damping: 15 }}>
-                        <Button asChild size="sm" variant="outline" className="bg-white hover:bg-indigo-50 text-indigo-700 border border-indigo-200 hover:border-indigo-400 transition-colors rounded-full shadow-sm">
+                        <Button asChild size="sm" variant="outline" className="bg-white hover:bg-[#fd2d61]/10 text-[#fd2d61] border border-[#fd2d61]/30 hover:border-[#fd2d61] transition-colors rounded-full shadow-sm">
                             <Link href="/signin">
                                 <span className="flex items-center px-1">
                                     <span className="text-sm mr-1.5">🔐</span>
@@ -89,7 +88,7 @@ const LandingNavbar = () => {
                             </Link>
                         </Button>
                     </motion.div>                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 300, damping: 15 }}>
-                            <Button asChild size="sm" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white transition-colors rounded-full border border-indigo-600 shadow-md">
+                            <Button asChild size="sm" className="bg-gradient-to-r from-[#fd2d61] to-[#b02aff] hover:from-[#fd2d61]/90 hover:to-[#b02aff]/90 text-white transition-colors rounded-full border border-[#fd2d61] shadow-md">
                                 <Link href="/signup">
                                     <span className="flex items-center px-1">
                                         <span className="text-sm mr-1.5">✏️</span>
@@ -114,7 +113,7 @@ type NavLinkProps = {
 };
 
 const NavLink = ({ href, external = false, children }: NavLinkProps) => {
-    const linkClasses = "flex items-center text-indigo-700 hover:text-indigo-900 font-medium text-sm hover:bg-indigo-50 py-2 px-3 rounded-lg transition-colors duration-200"; const content = (
+    const linkClasses = "flex items-center text-[#fd2d61] hover:text-[#b02aff] font-medium text-sm hover:bg-[#fd2d61]/10 py-2 px-3 rounded-lg transition-colors duration-200"; const content = (
         <motion.div
             className="flex items-center"
             whileHover={{ scale: 1.02 }}
