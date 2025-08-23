@@ -26,9 +26,9 @@ export default async function RootLayout({
 
   if (session?.user.role !== "ADMIN") {
     return (
-      <div className="flex justify-center items-center min-h-screen p-4 bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-indigo-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-red-600 to-red-700 p-6">
+      <div className="flex justify-center items-center min-h-screen p-4 bg-gradient-to-br from-white to-[#fd2d61]/10">
+        <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-[#fd2d61]/20 overflow-hidden">
+          <div className="bg-gradient-to-r from-[#fd2d61] to-[#b02aff] p-6">
             <h2 className="text-2xl font-bold text-white flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H9m3-4V3" />
@@ -38,18 +38,18 @@ export default async function RootLayout({
           </div>
           <div className="p-6 space-y-4">
             <div className="flex items-center justify-center">
-              <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="w-20 h-20 bg-[#fd2d61]/10 rounded-full flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-[#fd2d61]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H9m3-4V3" />
                 </svg>
               </div>
             </div>
-            <p className="text-center text-gray-700 font-medium">Please login as an admin to access this area.</p>
+            <p className="text-center text-[#fd2d61] font-medium">Please login as an admin to access this area.</p>
             <p className="text-center text-gray-500 text-sm">This section is restricted to administrative staff only.</p>
             <div className="flex justify-center mt-2">
               <Link
                 href="/signin"
-                className="flex items-center justify-center rounded-md bg-blue-600 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className="flex items-center justify-center rounded-md bg-gradient-to-r from-[#fd2d61] to-[#b02aff] px-6 py-3 text-sm font-medium text-white transition-colors hover:from-[#fd2d61]/90 hover:to-[#b02aff]/90 focus:outline-none focus:ring-2 focus:ring-[#fd2d61] focus:ring-offset-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

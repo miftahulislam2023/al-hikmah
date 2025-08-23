@@ -58,23 +58,23 @@ function SignUpContent() {
     }, [state.success, router]);
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-            <Card className="w-full max-w-3xl shadow-lg">
+        <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-white to-[#fd2d61]/10 p-4">
+            <Card className="w-full max-w-3xl shadow-lg border-[#fd2d61]/20">
                 <CardHeader className="space-y-1">
-                    <CardTitle className="text-2xl font-bold text-center">Student Registration</CardTitle>
-                    <CardDescription className="text-center">
+                    <CardTitle className="text-2xl font-bold text-center text-[#fd2d61]">Student Registration</CardTitle>
+                    <CardDescription className="text-center text-[#b02aff]">
                         Create a student account to access your courses
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     {state.success ? (
-                        <div className="p-3 bg-green-100 border border-green-400 text-green-700 rounded mb-4">
+                        <div className="p-3 bg-[#fd2d61]/10 border border-[#fd2d61] text-[#fd2d61] rounded mb-4">
                             Account created successfully! Redirecting to sign in page...
                         </div>
                     ) : (
                         <form action={formAction} className="space-y-4">
                             {state.error && (
-                                <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                                <div className="p-3 bg-[#fd2d61]/10 border border-[#fd2d61] text-[#fd2d61] rounded">
                                     {state.error}
                                 </div>
                             )}<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -95,7 +95,7 @@ function SignUpContent() {
 
                                 <div className="space-y-2">
                                     <Label htmlFor="phone">Phone Number</Label>
-                                    <Input id="phone" name="phone"  type="number" placeholder="Phone Number" required defaultValue={state.values?.phone || ""} />
+                                    <Input id="phone" name="phone" type="number" placeholder="Phone Number" required defaultValue={state.values?.phone || ""} />
                                 </div>
 
                                 <div className="space-y-2 md:col-span-2">
@@ -172,7 +172,7 @@ function SignUpContent() {
                 </CardContent>
                 <CardFooter className="flex justify-center">
                     <p className="text-sm text-muted-foreground">
-                        Already have an account? <Link href="/signin" className="text-primary hover:underline">Sign In</Link>
+                        Already have an account? <Link href="/signin" className="text-[#fd2d61] hover:text-[#b02aff] hover:underline">Sign In</Link>
                     </p>
                 </CardFooter>
             </Card>

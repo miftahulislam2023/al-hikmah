@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import localFont from 'next/font/local';
 import MobileNavbar from "@/components/MobileNavbar";
 import LandingNavbar from "@/components/LandingNavbar";
+import Image from "next/image";
 
 const solaimanlipi = localFont({
   src: [
@@ -98,11 +99,24 @@ export default function Home() {
         <div className="absolute top-[95%] left-[35%] w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#fd2d61] to-[#b02aff] opacity-90 rounded-2xl -rotate-12 animate-float shadow-lg" style={{ animationDelay: '2.5s' }}>
           <div className="flex items-center justify-center h-full text-xl md:text-2xl">🔍</div>
         </div>
-      </div>      {/* Hero Section with animated elements */}
-      <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center mt-8 pt-16 md:mt-16 md:pt-10 mb-8 text-center relative">        <div className="relative bg-white/40 backdrop-blur-md px-8 py-6 rounded-2xl shadow-xl mb-2 transform hover:scale-105 transition-transform duration-300">
-        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-[#fd2d61] mb-4">Neural Gem</h1>
-        <p className="text-lg md:text-2xl text-[#b02aff] max-w-3xl px-4 font-medium">Connecting the Neurons</p>      </div>
-      </div>      {/* Course Details Section - Center of page with fun design */}
+      </div>
+
+      {/* Hero Section with animated elements */}
+      <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center mt-8 pt-16 md:mt-16 md:pt-10 mb-8 text-center relative">
+        <div className="relative bg-white/40 backdrop-blur-md px-8 py-6 rounded-2xl outline outline-[#fd2d61]/30 mb-2 transform hover:scale-105 transition-transform duration-300">
+          <div className="relative h-[150px] w-[500px]">
+            <Image
+              src="/logo/logo.png"
+              alt="Neural Gem logo"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Course Details Section - Center of page with fun design */}
       <div id="courses" className="w-full max-w-4xl mx-auto bg-white/95 backdrop-blur-md rounded-3xl shadow-xl p-6 md:p-8 mb-10 relative z-10 border-4 border-[#fd2d61]/20">
         {/* Decorative floating elements */}
         <div className="absolute -top-8 -left-8 w-16 h-16 bg-gradient-to-br from-[#fd2d61] to-[#b02aff] opacity-95 rounded-full flex items-center justify-center transform rotate-12 border-4 border-white shadow-lg animate-float" style={{ animationDelay: '0.5s' }}>
@@ -120,7 +134,7 @@ export default function Home() {
 
         <div className="pt-8 pb-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 bg-gradient-to-r from-[#fd2d61] to-[#b02aff] text-transparent bg-clip-text">
-            Neural Gem Academy কর্তৃক পরিচালিত, মাধ্যমিক ও উচ্চ মাধ্যমিক স্কুল ও কলেজ ছাত্র-ছাত্রীদের জন্য কোডিং ও প্রোগ্রামিং ল্যাংগুয়েজ কোর্স
+            <span className="font-mono">Neural Gem Academy</span> কর্তৃক পরিচালিত, মাধ্যমিক ও উচ্চ মাধ্যমিক স্কুল ও কলেজ ছাত্র-ছাত্রীদের জন্য কোডিং ও প্রোগ্রামিং ল্যাংগুয়েজ কোর্স
           </h2>
 
           <div className="text-[#fd2d61]">

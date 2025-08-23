@@ -13,7 +13,7 @@ export default function TeacherNavBar() {
     };
 
     return (
-        <nav className="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white shadow-md">
+        <nav className="bg-gradient-to-r from-[#fd2d61] to-[#b02aff] text-white shadow-md border-b border-white/20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
                     <div className="flex items-center">
@@ -29,21 +29,21 @@ export default function TeacherNavBar() {
                         <div className="hidden md:flex space-x-8">
                             <Link
                                 href="/teacher"
-                                className="flex items-center space-x-2 py-2 px-3 rounded-md hover:bg-indigo-500 transition-colors duration-200"
+                                className="flex items-center space-x-2 py-2 px-3 rounded-md hover:bg-white/20 transition-colors duration-200"
                             >
                                 <LayoutDashboard size={18} />
                                 <span>Dashboard</span>
                             </Link>
                             <Link
                                 href="/teacher/courses"
-                                className="flex items-center space-x-2 py-2 px-3 rounded-md hover:bg-indigo-500 transition-colors duration-200"
+                                className="flex items-center space-x-2 py-2 px-3 rounded-md hover:bg-white/20 transition-colors duration-200"
                             >
                                 <BookOpen size={18} />
                                 <span>My Courses</span>
                             </Link>
                             <Link
                                 href="/teacher/profile/edit"
-                                className="flex items-center space-x-2 py-2 px-3 rounded-md hover:bg-indigo-500 transition-colors duration-200"
+                                className="flex items-center space-x-2 py-2 px-3 rounded-md hover:bg-white/20 transition-colors duration-200"
                             >
                                 <UserCog size={18} />
                                 <span>Profile</span>
@@ -61,7 +61,7 @@ export default function TeacherNavBar() {
                     <div className="md:hidden flex items-center">
                         <button
                             onClick={toggleMenu}
-                            className="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-indigo-500 focus:outline-none"
+                            className="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-white/20 focus:outline-none"
                         >
                             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                         </button>
@@ -71,10 +71,10 @@ export default function TeacherNavBar() {
 
             {/* Mobile menu */}
             {isMenuOpen && (
-                <div className="md:hidden bg-indigo-700 px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <div className="md:hidden bg-[#b02aff]/80 px-2 pt-2 pb-3 space-y-1 sm:px-3">
                     <Link
                         href="/teacher"
-                        className="flex items-center space-x-3 py-2 px-3 rounded-md hover:bg-indigo-500 transition-colors duration-200"
+                        className="flex items-center space-x-3 py-2 px-3 rounded-md hover:bg-white/20 transition-colors duration-200"
                         onClick={toggleMenu}
                     >
                         <LayoutDashboard size={18} />
@@ -82,7 +82,7 @@ export default function TeacherNavBar() {
                     </Link>
                     <Link
                         href="/teacher/courses"
-                        className="flex items-center space-x-3 py-2 px-3 rounded-md hover:bg-indigo-500 transition-colors duration-200"
+                        className="flex items-center space-x-3 py-2 px-3 rounded-md hover:bg-white/20 transition-colors duration-200"
                         onClick={toggleMenu}
                     >
                         <BookOpen size={18} />
@@ -90,7 +90,7 @@ export default function TeacherNavBar() {
                     </Link>
                     <Link
                         href="/teacher/profile/edit"
-                        className="flex items-center space-x-3 py-2 px-3 rounded-md hover:bg-indigo-500 transition-colors duration-200"
+                        className="flex items-center space-x-3 py-2 px-3 rounded-md hover:bg-white/20 transition-colors duration-200"
                         onClick={toggleMenu}
                     >
                         <UserCog size={18} />

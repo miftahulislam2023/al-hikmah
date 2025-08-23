@@ -26,17 +26,17 @@ export default function AdminNavbar() {
 
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out
-      ${scrolled ? "bg-gray-900/95 backdrop-blur-md shadow-lg py-3" : "bg-gray-900 py-4"}`}
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out border-b
+      ${scrolled ? "bg-white/95 backdrop-blur-md shadow-lg py-3 border-[#fd2d61]/30" : "bg-white/90 py-4 border-[#fd2d61]/20"}`}
         >
             <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6">
                 {/* Logo */}
                 <div className="flex items-center space-x-2">
-                    <div className="bg-gradient-to-r from-indigo-500 to-purple-600 w-8 h-8 rounded-lg flex items-center justify-center">
+                    <div className="bg-gradient-to-r from-[#fd2d61] to-[#b02aff] w-8 h-8 rounded-lg flex items-center justify-center">
                         <span className="text-white text-lg font-bold">A</span>
                     </div>
-                    <h1 className="text-xl font-bold bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">
-                        Neural Gem<span className="text-yellow-400">Admin</span>
+                    <h1 className="text-xl font-bold bg-gradient-to-r from-[#fd2d61] to-[#b02aff] bg-clip-text text-transparent">
+                        Neural Gem<span className="text-[#ff9b1b]">Admin</span>
                     </h1>
                 </div>
 
@@ -44,7 +44,7 @@ export default function AdminNavbar() {
                 <div className="md:hidden">
                     <button
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        className="text-white hover:text-yellow-400 focus:outline-none transition-colors duration-200"
+                        className="text-[#fd2d61] hover:text-[#b02aff] focus:outline-none transition-colors duration-200"
                         aria-expanded={mobileMenuOpen}
                         aria-label="Toggle menu"
                     >
@@ -134,7 +134,7 @@ export default function AdminNavbar() {
                 className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${mobileMenuOpen ? "max-h-112 opacity-100" : "max-h-0 opacity-0"
                     }`}
             >
-                <div className="px-4 sm:px-6 pt-4 pb-6 border-t border-gray-700/50 bg-gray-800/50 backdrop-blur-sm">
+                <div className="px-4 sm:px-6 pt-4 pb-6 border-t border-[#fd2d61]/20 bg-white/80 backdrop-blur-sm">
                     <nav className="grid grid-cols-1 gap-2">
                         <MobileNavLink href="/admin" currentPath={pathname}>
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -211,8 +211,8 @@ const NavLink = ({ href, currentPath, children }) => {
         <Link
             href={href}
             className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${isActive
-                ? "bg-gradient-to-r from-indigo-600/90 to-purple-600/90 text-white shadow-md"
-                : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                ? "bg-gradient-to-r from-[#fd2d61] to-[#b02aff] text-white shadow-md"
+                : "text-[#fd2d61] hover:bg-[#fd2d61]/10 hover:text-[#b02aff]"
                 }`}
         >
             {children}
@@ -230,8 +230,8 @@ const MobileNavLink = ({ href, currentPath, children }) => {
         <Link
             href={href}
             className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${isActive
-                ? "bg-gradient-to-r from-indigo-600/90 to-purple-600/90 text-white shadow-md"
-                : "text-gray-200 hover:bg-gray-700/70 hover:text-white"
+                ? "bg-gradient-to-r from-[#fd2d61] to-[#b02aff] text-white shadow-md"
+                : "text-[#fd2d61] hover:bg-[#fd2d61]/10 hover:text-[#b02aff]"
                 }`}
         >
             {children}

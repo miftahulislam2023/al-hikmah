@@ -3,6 +3,7 @@
 import { useState, useEffect, memo } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 const MobileNavbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -127,15 +128,32 @@ const MobileNavbar = () => {
                         <div className="py-2 relative z-10">
                             <div className="px-3 py-2">
                                 <motion.div
-                                    className="text-md font-bold text-[#fd2d61] mb-1"
+                                    className="text-md font-serif text-[#7800be] mb-1 flex justify-start items-center"
                                     initial={{ x: -20, opacity: 0 }}
                                     animate={{ x: 0, opacity: 1 }}
                                     transition={{ delay: 0.15 }}
                                 >
-                                    Neural Gem Academy
+                                    {/* <Image
+                                        src="/logo/icon.png"
+                                        height={50}
+                                        width={50}
+                                        alt='Neural Gem Icon'
+                                        className='mr-4'
+                                    />
+                                    Neural Gem */}
+                                    <div className="relative h-[60px] w-[200px]">
+                                        <Image
+                                            src="/logo/logo.png"
+                                            alt="Neural Gem logo"
+                                            fill
+                                            className="object-cover"
+                                            priority
+                                        />
+                                    </div>
                                 </motion.div>
                                 <div className="h-0.5 w-full bg-gradient-to-r from-[#fd2d61]/30 to-[#b02aff]/30 rounded-full mb-2"></div>
-                            </div>              <motion.div
+                            </div>
+                            <motion.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}

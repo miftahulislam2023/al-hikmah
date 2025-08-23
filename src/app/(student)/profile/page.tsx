@@ -5,13 +5,13 @@ export default async function StudentProfile() {
     const user = session.user;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-10 px-4">
+        <div className="min-h-screen bg-gradient-to-br from-white to-[#fd2d61]/10 py-10 px-4">
             <div className="max-w-5xl mx-auto">
                 {/* Profile Header */}
-                <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-6">
-                    <div className="bg-gradient-to-r from-blue-600 to-indigo-600 pt-8 pb-16 px-8 relative">
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-6 border border-[#fd2d61]/20">
+                    <div className="bg-gradient-to-r from-[#fd2d61] to-[#b02aff] pt-8 pb-16 px-8 relative">
                         <h1 className="text-3xl font-bold text-white mb-1">Student Profile</h1>
-                        <p className="text-blue-100">Neural Gem Academy</p>
+                        <p className="text-white/80">Neural Gem Academy</p>
 
                         {/* Decorative Elements */}
                         <div className="absolute top-0 right-0 w-48 h-48 bg-white opacity-10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
@@ -20,11 +20,11 @@ export default async function StudentProfile() {
 
                     {/* Avatar and Basic Info Card */}
                     <div className="px-8 -mt-12 pb-6 relative z-10">
-                        <div className="flex flex-col md:flex-row items-center md:items-start bg-white rounded-xl shadow-md p-6 border border-indigo-50">
+                        <div className="flex flex-col md:flex-row items-center md:items-start bg-white rounded-xl shadow-md p-6 border border-[#fd2d61]/20">
                             <div className="flex-shrink-0 mb-6 md:mb-0 md:mr-8">
-                                <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-lg relative bg-blue-50">
+                                <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-lg relative bg-[#fd2d61]/10">
                                     <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="text-6xl font-bold text-blue-300">
+                                        <div className="text-6xl font-bold text-[#fd2d61]/60">
                                             {user.name ? user.name.charAt(0).toUpperCase() : '?'}
                                         </div>
                                     </div>

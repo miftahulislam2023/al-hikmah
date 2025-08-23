@@ -40,22 +40,23 @@ const LandingNavbar = () => {
             transition={{ delay: 0.2 }}
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center">                {/* Logo and brand */}                <div className="flex items-center">
-                <Link
-                    href="/"
-                    className="flex items-center space-x-2 text-[#fd2d61] font-bold logo-link"
-                >
-                    <div className="relative h-[80px] w-[300px]">
-                        <Image
-                            src="/logo/logo.png"
-                            alt="Neural Gem logo"
-                            fill
-                            className="object-cover"
-                            priority
-                        />
-                    </div>
-                </Link>
-            </div>
+            <div className="flex justify-between items-center">
+                {/* Logo and brand */}                <div className="flex items-center">
+                    <Link
+                        href="/"
+                        className="flex items-center space-x-2 text-[#fd2d61] font-bold logo-link"
+                    >
+                        <div className="relative h-[80px] w-[250px]">
+                            <Image
+                                src="/logo/logo.png"
+                                alt="Neural Gem logo"
+                                fill
+                                className="object-cover"
+                                priority
+                            />
+                        </div>
+                    </Link>
+                </div>
 
                 {/* Navigation links */}
                 <div className="hidden md:flex md:items-center md:space-x-4 lg:space-x-8">
