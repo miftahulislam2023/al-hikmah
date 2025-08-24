@@ -36,7 +36,7 @@ export default function AdminNavbar() {
                         <span className="text-white text-lg font-bold">A</span>
                     </div>
                     <h1 className="text-xl font-bold bg-gradient-to-r from-[#fd2d61] to-[#b02aff] bg-clip-text text-transparent">
-                        Neural Gem<span className="text-[#ff9b1b]">Admin</span>
+                        Neural Gem<span className="text-[#ff9b1b]"> Admin</span>
                     </h1>
                 </div>
 
@@ -122,10 +122,11 @@ export default function AdminNavbar() {
                         </svg>
                         Payment
                     </NavLink>
-                    <div className="hidden sm:ml-6 sm:flex sm:items-center">
+                    <div className="hidden md:ml-6 md:flex md:items-center">
                         <Button
                             onClick={() => signOut({ callbackUrl: "/signin" })}
                             variant="destructive"
+                            size="sm"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -152,8 +153,8 @@ export default function AdminNavbar() {
                 className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${mobileMenuOpen ? "max-h-112 opacity-100" : "max-h-0 opacity-0"
                     }`}
             >
-                <div className="px-4 sm:px-6 pt-4 pb-6 border-t border-[#fd2d61]/20 bg-white/80 backdrop-blur-sm">
-                    <nav className="grid grid-cols-1 gap-2">
+                <div className="px-4 sm:px-6 pt-2 pb-3 border-t border-[#fd2d61]/20 bg-white/80 backdrop-blur-sm">
+                    <nav className="grid grid-cols-1 gap-0.5">
                         <MobileNavLink href="/admin" currentPath={pathname}>
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -265,7 +266,7 @@ const MobileNavLink = ({ href, currentPath, children }) => {
     return (
         <Link
             href={href}
-            className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${isActive
+            className={`flex items-center px-4 py-2 rounded-lg transition-all duration-200 ${isActive
                 ? "bg-gradient-to-r from-[#fd2d61] to-[#b02aff] text-white shadow-md"
                 : "text-[#fd2d61] hover:bg-[#fd2d61]/10 hover:text-[#b02aff]"
                 }`}

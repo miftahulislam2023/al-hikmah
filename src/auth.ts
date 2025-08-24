@@ -116,11 +116,39 @@ export const { handlers, signIn, signOut, auth: nextAuth } = NextAuth({
             }
             return true;
         },
-        jwt({ token, user }) {
+        async jwt({ token, user }) {
             if (user) {
-                token.id = user.id;
-                token.role = user.role;
+                // If we have a user object but no role (Google sign-in case)
+                if (!user.role && user.email) {
+                    // Fetch the user from database
+                    const dbUser = await prisma.user.findUnique({
+                        where: { email: user.email }
+                    });
+
+                    if (dbUser) {
+                        token.id = dbUser.id; // Use database user ID, not Google ID
+                        token.role = dbUser.role;
+                    }
+                } else {
+                    // Normal case (credentials sign-in)
+                    token.id = user.id;
+                    token.role = user.role;
+                }
             }
+
+            // For subsequent calls (when user is undefined), preserve existing token data
+            // but ensure we have the role if it's missing
+            if (!token.role && token.email) {
+                const dbUser = await prisma.user.findUnique({
+                    where: { email: token.email as string }
+                });
+
+                if (dbUser) {
+                    token.id = dbUser.id;
+                    token.role = dbUser.role;
+                }
+            }
+
             return token;
         },
         async session({ session, token }) {

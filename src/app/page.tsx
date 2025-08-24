@@ -104,7 +104,7 @@ export default function Home() {
       {/* Hero Section with animated elements */}
       <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center mt-8 pt-16 md:mt-16 md:pt-10 mb-8 text-center relative">
         <div className="relative bg-white/40 backdrop-blur-md px-8 py-6 rounded-2xl outline outline-[#fd2d61]/30 mb-2 transform hover:scale-105 transition-transform duration-300">
-          <div className="relative h-[150px] w-[500px]">
+          <div className="relative h-[100px] w-[275px] lg:h-[150px] lg:w-[500px] ">
             <Image
               src="/logo/logo.png"
               alt="Neural Gem logo"

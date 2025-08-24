@@ -83,7 +83,7 @@ export default function SignInPage() {
     // Handle Google sign-in
     const handleGoogleSignIn = async () => {
         try {
-            await signIn("google", { callbackUrl: "/" });
+            await signIn("google", { callbackUrl: "/profile" });
         } catch (error) {
             console.error("Google sign-in error:", error);
         }
