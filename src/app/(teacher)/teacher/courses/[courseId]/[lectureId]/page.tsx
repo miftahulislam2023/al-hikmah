@@ -10,8 +10,7 @@ export default async function LectureDetailPage({ params }: { params: { courseId
     const session = await auth();
     if (!session) redirect("/signin");
 
-    const courseId = Number((await params).courseId);
-    const lectureId = Number((await params).lectureId);
+    const { courseId, lectureId } = await params;
 
     // Fetch the lecture
     const lecture = await prisma.lecture.findUnique({

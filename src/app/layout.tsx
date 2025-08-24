@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Poppins } from 'next/font/google'
 import localFont from 'next/font/local'
+import AuthProvider from "@/components/AuthProvider";
 
 
 const solaimanlipi = localFont({
@@ -28,8 +29,8 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: "Neural Gem Academy",
-  description: "Connecting the Neurons",
+  title: "Al Hikmah Academy",
+  description: "Learning Management System",
 };
 
 export default function RootLayout({
@@ -43,7 +44,9 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </head>
       <body className={`${poppins.variable} ${solaimanlipi.variable} font-bengali`}>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

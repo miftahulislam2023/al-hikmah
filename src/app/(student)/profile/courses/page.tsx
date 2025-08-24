@@ -1,158 +1,318 @@
-import { Button } from "@/components/ui/button";
+import { getStudentEnrollments } from "@/actions/enrollment";
+import { getStudentProgress } from "@/actions/lecture";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import prisma from "@/lib/prisma";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { auth } from "@/auth";
-import { getBoughtCourses } from "@/actions/course";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import prisma from "@/lib/prisma";
+import { Progress } from "@/components/ui/progress";
 
-export default async function ViewCourses() {
-    // Get the current authenticated student
+export default async function StudentCoursesPage() {
     const session = await auth();
-    const studentId = session?.user?.id ? parseInt(session.user.id) : null;
+    if (!session || session.user?.role !== "STUDENT") {
+        redirect("/signin");
+    }
 
-    // Fetch all courses
-    const allCourses = await prisma.course.findMany({
-        where: { isActive: true },
-        orderBy: { semester: 'asc' }
+    // Get student ID from the database
+    const student = await prisma.student.findUnique({
+        where: { userId: session.user.id },
+        select: { id: true }
     });
 
-    // Fetch enrolled courses for the student
-    const enrolledCourses = studentId ? await getBoughtCourses(studentId) : [];
+    if (!student) {
+        redirect("/signin");
+    }
 
-    // Filter available courses (not enrolled)
-    const enrolledCourseIds = enrolledCourses && !('error' in enrolledCourses)
-        ? enrolledCourses.map(course => course.id)
-        : [];
-    const availableCourses = allCourses.filter(course => !enrolledCourseIds.includes(course.id));
+    const enrollmentsResult = await getStudentEnrollments(student.id);
+
+    if (enrollmentsResult.error) {
+        return (
+            <div className="container mx-auto p-6">
+                <h1 className="text-2xl font-bold text-red-600 mb-4">Error</h1>
+                <p className="text-red-500">{enrollmentsResult.error}</p>
+            </div>
+        );
+    }
+
+    const enrollments = enrollmentsResult.data || [];
+    const verifiedEnrollments = enrollments.filter(e => e.paymentStatus === "VERIFIED");
+    const pendingEnrollments = enrollments.filter(e => e.paymentStatus === "PENDING");
+
+    // Get progress for verified enrollments
+    const progressData = await Promise.all(
+        verifiedEnrollments.map(async (enrollment) => {
+            const progressResult = await getStudentProgress(student.id, enrollment.courseId);
+            return {
+                courseId: enrollment.courseId,
+                progress: progressResult.data || []
+            };
+        })
+    );
+
+    const progressMap = Object.fromEntries(
+        progressData.map(p => [p.courseId, p.progress])
+    );
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 px-6 py-14">
-            <div className="max-w-7xl mx-auto">
-                {/* Page header */}
-                <header className="text-center mb-16">
-                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
-                        My Learning Journey
-                    </h1>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        Track your enrolled courses and discover new opportunities to enhance your academic excellence
-                    </p>
-                </header>
+        <div className="container mx-auto p-6 space-y-6">
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-800">My Courses</h1>
+                    <p className="text-gray-600">Continue your learning journey</p>
+                </div>
+                <div className="flex gap-3">
+                    <Badge variant="default" className="text-lg px-3 py-1">
+                        {verifiedEnrollments.length} Active
+                    </Badge>
+                    {pendingEnrollments.length > 0 && (
+                        <Badge variant="secondary" className="text-lg px-3 py-1">
+                            {pendingEnrollments.length} Pending
+                        </Badge>
+                    )}
+                    <Link href="/profile/courses/browse">
+                        <Button variant="outline">
+                            Browse More Courses
+                        </Button>
+                    </Link>
+                </div>
+            </div>
 
-                {/* Enrolled courses section */}
-                {enrolledCourses && !('error' in enrolledCourses) && enrolledCourses.length > 0 && (
-                    <section className="mb-16">
-                        <div className="flex items-center justify-between mb-8">
-                            <h2 className="text-2xl font-bold text-gray-800">My Enrolled Courses</h2>
-                            <div className="px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                                {enrolledCourses.length} {enrolledCourses.length === 1 ? 'Course' : 'Courses'}
+            {/* Pending Payments Alert */}
+            {pendingEnrollments.length > 0 && (
+                <Card className="border-yellow-200 bg-yellow-50">
+                    <CardHeader>
+                        <CardTitle className="text-yellow-800 text-lg">⏳ Pending Enrollments</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-yellow-700 mb-3">
+                            You have {pendingEnrollments.length} course(s) waiting for payment verification.
+                        </p>
+                        <div className="space-y-2">
+                            {pendingEnrollments.map((enrollment) => (
+                                <div key={enrollment.id} className="flex items-center justify-between bg-white p-3 rounded border">
+                                    <div>
+                                        <p className="font-medium">{enrollment.course.title}</p>
+                                        <p className="text-sm text-gray-600">
+                                            Enrolled: {new Date(enrollment.enrolledAt).toLocaleDateString()}
+                                        </p>
+                                    </div>
+                                    <Badge variant="secondary">Payment Review</Badge>
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
+
+            {/* Active Courses */}
+            {verifiedEnrollments.length === 0 && pendingEnrollments.length === 0 ? (
+                <Card>
+                    <CardContent className="text-center py-12">
+                        <div className="text-gray-400 text-6xl mb-4">📚</div>
+                        <h3 className="text-xl font-medium text-gray-700 mb-2">No Courses Yet</h3>
+                        <p className="text-gray-500 mb-6">Start your learning journey by enrolling in courses.</p>
+                        <Link href="/profile/courses/browse">
+                            <Button className="bg-blue-600 hover:bg-blue-700">
+                                Browse Available Courses
+                            </Button>
+                        </Link>
+                    </CardContent>
+                </Card>
+            ) : verifiedEnrollments.length === 0 ? (
+                <Card>
+                    <CardContent className="text-center py-12">
+                        <div className="text-gray-400 text-6xl mb-4">⏳</div>
+                        <h3 className="text-xl font-medium text-gray-700 mb-2">Courses Under Review</h3>
+                        <p className="text-gray-500 mb-6">
+                            Your payment(s) are being verified. You&apos;ll have access once approved.
+                        </p>
+                        <Link href="/profile/courses/browse">
+                            <Button variant="outline">
+                                Browse More Courses
+                            </Button>
+                        </Link>
+                    </CardContent>
+                </Card>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {verifiedEnrollments.map((enrollment) => {
+                        const course = enrollment.course;
+                        const courseProgress = progressMap[course.id] || [];
+                        const totalLectures = course._count.lectures;
+                        const completedLectures = courseProgress.length;
+                        const progressPercentage = totalLectures > 0 ? (completedLectures / totalLectures) * 100 : 0;
+
+                        return (
+                            <Card key={enrollment.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                                {/* Course Image */}
+                                <div className="relative h-40 bg-gradient-to-br from-blue-400 to-purple-600">
+                                    {course.posterUrl ? (
+                                        <Image
+                                            src={course.posterUrl}
+                                            alt={course.title}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    ) : (
+                                        <div className="flex items-center justify-center h-full">
+                                            <div className="text-white text-5xl">📚</div>
+                                        </div>
+                                    )}
+                                    <div className="absolute top-3 right-3">
+                                        <Badge
+                                            variant="default"
+                                            className="bg-green-600 text-white"
+                                        >
+                                            Enrolled
+                                        </Badge>
+                                    </div>
+                                    {progressPercentage === 100 && (
+                                        <div className="absolute top-3 left-3">
+                                            <Badge
+                                                variant="default"
+                                                className="bg-yellow-600 text-white"
+                                            >
+                                                ✅ Completed
+                                            </Badge>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <CardHeader>
+                                    <CardTitle className="text-lg line-clamp-2">
+                                        {course.title}
+                                    </CardTitle>
+                                    <div className="flex gap-2">
+                                        {course.semester && (
+                                            <Badge variant="outline" className="text-xs">
+                                                {course.semester}
+                                            </Badge>
+                                        )}
+                                        <Badge variant="outline" className="text-xs">
+                                            {totalLectures} Lectures
+                                        </Badge>
+                                    </div>
+                                </CardHeader>
+
+                                <CardContent className="space-y-4">
+                                    {/* Progress */}
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-gray-600">Progress</span>
+                                            <span className="font-medium">
+                                                {completedLectures}/{totalLectures} lectures
+                                            </span>
+                                        </div>
+                                        <Progress value={progressPercentage} className="h-2" />
+                                        <div className="text-xs text-gray-500 text-center">
+                                            {Math.round(progressPercentage)}% Complete
+                                        </div>
+                                    </div>
+
+                                    {/* Teachers */}
+                                    <div>
+                                        <p className="text-sm font-medium text-gray-700 mb-1">Instructors:</p>
+                                        {course.teachers.length === 0 ? (
+                                            <p className="text-sm text-gray-500 italic">No instructors assigned</p>
+                                        ) : (
+                                            <div className="flex flex-wrap gap-1">
+                                                {course.teachers.slice(0, 2).map((teacher) => (
+                                                    <div key={teacher.id} className="flex items-center gap-1 text-xs bg-blue-50 px-2 py-1 rounded">
+                                                        <span>👨‍🏫</span>
+                                                        <span>{teacher.user.name || "Teacher"}</span>
+                                                    </div>
+                                                ))}
+                                                {course.teachers.length > 2 && (
+                                                    <div className="flex items-center gap-1 text-xs bg-gray-50 px-2 py-1 rounded">
+                                                        +{course.teachers.length - 2} more
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Course Stats */}
+                                    <div className="grid grid-cols-2 gap-2 text-center bg-gray-50 p-3 rounded-lg">
+                                        <div>
+                                            <div className="text-sm font-semibold text-blue-600">
+                                                {completedLectures}
+                                            </div>
+                                            <div className="text-xs text-gray-600">Completed</div>
+                                        </div>
+                                        <div>
+                                            <div className="text-sm font-semibold text-blue-600">
+                                                {totalLectures - completedLectures}
+                                            </div>
+                                            <div className="text-xs text-gray-600">Remaining</div>
+                                        </div>
+                                    </div>
+
+                                    {/* Action Button */}
+                                    <Link href={`/profile/courses/${course.id}`} className="block">
+                                        <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                                            {progressPercentage === 0
+                                                ? "Start Learning"
+                                                : progressPercentage === 100
+                                                    ? "Review Course"
+                                                    : "Continue Learning"
+                                            }
+                                        </Button>
+                                    </Link>
+
+                                    {/* Enrollment Info */}
+                                    <div className="text-xs text-gray-500 text-center">
+                                        Enrolled: {new Date(enrollment.enrolledAt).toLocaleDateString()}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        );
+                    })}
+                </div>
+            )}
+
+            {/* Learning Statistics */}
+            {verifiedEnrollments.length > 0 && (
+                <Card className="bg-gradient-to-r from-blue-50 to-green-50 border-blue-200">
+                    <CardHeader>
+                        <CardTitle className="text-blue-800">Learning Progress Overview</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div>
+                                <div className="text-2xl font-bold text-blue-600">
+                                    {verifiedEnrollments.length}
+                                </div>
+                                <div className="text-sm text-blue-700">Active Courses</div>
+                            </div>
+                            <div>
+                                <div className="text-2xl font-bold text-blue-600">
+                                    {verifiedEnrollments.filter(e => {
+                                        const progress = progressMap[e.courseId] || [];
+                                        const total = e.course._count.lectures;
+                                        return total > 0 && progress.length === total;
+                                    }).length}
+                                </div>
+                                <div className="text-sm text-blue-700">Completed</div>
+                            </div>
+                            <div>
+                                <div className="text-2xl font-bold text-blue-600">
+                                    {Object.values(progressMap).reduce((sum, progress) => sum + progress.length, 0)}
+                                </div>
+                                <div className="text-sm text-blue-700">Lectures Watched</div>
+                            </div>
+                            <div>
+                                <div className="text-2xl font-bold text-blue-600">
+                                    {verifiedEnrollments.reduce((sum, e) => sum + e.course._count.lectures, 0)}
+                                </div>
+                                <div className="text-sm text-blue-700">Total Lectures</div>
                             </div>
                         </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {enrolledCourses.map((course) => (
-                                <Card
-                                    key={course.id}
-                                    className="rounded-xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-white"
-                                >
-                                    <div className="h-2 bg-blue-600"></div>
-                                    <CardHeader className="p-6 pb-3">
-                                        <div className="flex items-center justify-between mb-2">
-                                            <span className="bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-xs font-semibold">
-                                                Semester {course.semester}
-                                            </span>
-                                            <span className="text-emerald-500 flex items-center text-sm font-medium">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                                </svg>
-                                                Enrolled
-                                            </span>
-                                        </div>
-                                        <CardTitle className="text-xl font-bold text-gray-800">
-                                            {course.title}
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent className="p-6 pt-2">
-                                        <div className="space-y-4">
-                                            <div className="flex justify-between items-center text-sm border-b border-gray-100 pb-3">
-                                                <span className="text-gray-500">Course Fee</span>
-                                                <span className="font-semibold">৳ {course.fee}</span>
-                                            </div>
-                                            <Link href={`/profile/courses/${course.id}`} className="block mt-4">
-                                                <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                                                    Continue Learning
-                                                </Button>
-                                            </Link>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
-                    </section>
-                )}
-
-                {/* Available courses section */}
-                <section>
-                    <div className="flex items-center justify-between mb-8">
-                        <h2 className="text-2xl font-bold text-gray-800">Available Courses</h2>
-                        <div className="px-4 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                            {availableCourses.length} {availableCourses.length === 1 ? 'Course' : 'Courses'}
-                        </div>
-                    </div>
-
-                    {availableCourses.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {availableCourses.map((course) => (
-                                <Card
-                                    key={course.id}
-                                    className="rounded-xl border border-gray-100 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden bg-white group"
-                                >
-                                    <CardHeader className="p-6 pb-3 bg-gradient-to-r from-gray-50 to-white">
-                                        <div className="flex items-center justify-between mb-2">
-                                            <span className="bg-gray-100 text-gray-700 rounded-full px-3 py-1 text-xs font-semibold">
-                                                Semester {course.semester}
-                                            </span>
-                                            {course.isActive ? (
-                                                <span className="text-green-500 text-sm font-medium">
-                                                    Open for Enrollment
-                                                </span>
-                                            ) : (
-                                                <span className="text-red-500 text-sm font-medium">
-                                                    Enrollment Closed
-                                                </span>
-                                            )}
-                                        </div>
-                                        <CardTitle className="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
-                                            {course.title}
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent className="p-6 pt-2">
-                                        <div className="space-y-4">
-                                            <div className="flex justify-between items-center text-sm border-b border-gray-100 pb-3">
-                                                <span className="text-gray-500">Course Fee</span>
-                                                <span className="font-semibold">৳ {course.fee}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-gray-500 text-sm">Course Details</span>
-                                                <span className="text-sm text-gray-600">Standard curriculum</span>
-                                            </div>
-                                            <Link href={`/profile/courses/${course.id}`} className="block mt-4">
-                                                <Button className="w-full bg-gray-800 hover:bg-gray-900 group-hover:bg-blue-600">
-                                                    View Details
-                                                </Button>
-                                            </Link>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="bg-white rounded-xl p-10 text-center shadow-md">
-                            <h3 className="text-xl font-semibold text-gray-800 mb-2">You&apos;re All Set!</h3>
-                            <p className="text-gray-600">You&apos;ve enrolled in all our available courses. Check your enrolled courses section above.</p>
-                        </div>
-                    )}
-                </section>
-            </div>
+                    </CardContent>
+                </Card>
+            )}
         </div>
     );
 }

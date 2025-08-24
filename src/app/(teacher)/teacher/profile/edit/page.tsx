@@ -1,4 +1,4 @@
-import { updateTeacher } from "@/actions/teacher";
+import { updateTeacherProfile } from "@/actions/user";
 import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +23,7 @@ export default async function EditTeacherProfile() {
                 <Form
                     action={async (formData) => {
                         "use server"
-                        await updateTeacher(formData);
+                        await updateTeacherProfile(formData);
                     }}
                     className="space-y-5"
                 >

@@ -125,6 +125,9 @@ export default function StudentNavbar() {
                         <NavLink href="/profile/courses" pathname={pathname} icon={BookOpen}>
                             My Courses
                         </NavLink>
+                        <NavLink href="/profile/courses/browse" pathname={pathname} icon={BookOpen}>
+                            Browse Courses
+                        </NavLink>
 
                         <motion.div
                             className="ml-4"
@@ -293,6 +296,23 @@ export default function StudentNavbar() {
                                         <div className="flex items-center">
                                             <span className="text-lg mr-2">📖</span>
                                             My Courses
+                                        </div>
+                                    </Link>
+                                </motion.div>
+
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: scrolled ? 0.4 : 0.35 }}
+                                >
+                                    <Link
+                                        href="/profile/courses/browse"
+                                        className="block px-4 py-2.5 hover:bg-[#fd2d61]/10 text-[#fd2d61] font-medium transition-colors rounded-lg"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        <div className="flex items-center">
+                                            <span className="text-lg mr-2">🔍</span>
+                                            Browse Courses
                                         </div>
                                     </Link>
                                 </motion.div>

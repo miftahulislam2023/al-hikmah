@@ -4,9 +4,13 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Form from "next/form";
-import { registerStudent } from "@/actions/student";
+import { signUpStudent } from "@/actions/auth";
 
 export default function RegisterStudent() {
+    const handleRegister = async (formData: FormData) => {
+        "use server";
+        await signUpStudent(formData);
+    };
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -15,7 +19,7 @@ export default function RegisterStudent() {
                     <CardTitle className="text-center">Create Student</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <Form action={registerStudent} className="space-y-4">
+                    <Form action={handleRegister} className="space-y-4">
                         <Label>Name</Label>
                         <Input id="name" type="text" name="name" placeholder="Enter name" required />
 

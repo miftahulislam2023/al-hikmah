@@ -24,6 +24,11 @@ export default async function Page({ params }: PageProps) {
     const { data: course, error } = await getCourseById(courseId);
     if (!course || error) return notFound();
 
+    const handleUpdateCourse = async (formData: FormData) => {
+        "use server";
+        await updateCourse(formData);
+    };
+
     return (
         <div className="bg-gray-100 px-6 py-20">
             <div className="max-w-3xl mx-auto">
@@ -32,7 +37,7 @@ export default async function Page({ params }: PageProps) {
                 </h1>
 
                 <div className="bg-white shadow-lg rounded-xl p-8">
-                    <Form action={updateCourse} className="space-y-6">
+                    <Form action={handleUpdateCourse} className="space-y-6">
                         <Input type="hidden" name="courseId" value={course.id} />
 
                         <div className="space-y-2">
@@ -68,11 +73,11 @@ export default async function Page({ params }: PageProps) {
                         <div className="space-y-2">
                             <Label htmlFor="fee">Course Fee</Label>
                             <Input
-                                id="fee"
+                                id="price"
                                 type="number"
-                                name="fee"
-                                defaultValue={course.fee}
-                                placeholder="Enter course fee"
+                                name="price"
+                                defaultValue={course.price}
+                                placeholder="Enter course price"
                             />
                         </div>
 

@@ -1,4 +1,5 @@
 import { DefaultSession } from "next-auth"
+import { Role, Gender, Class } from "@prisma/client"
 
 declare module "next-auth" {
     /**
@@ -7,21 +8,29 @@ declare module "next-auth" {
     interface Session {
         user: {
             id: string
-            name: string
-            email: string
-            phone: string
-            address: string
-            dob: Date | null
-            gender: string
-            currentInstitute: string
-            role: string
-            // Student-specific properties (only available when role is not TEACHER)
-            roll?: string
-            sscBatch?: string
-            currentClass?: string
-            guardianName?: string
-            guardianPhone?: string
-            guardianOccupation?: string
+            role: Role
+            phone?: string | null
+
+            // Student-specific properties
+            studentId?: string
+            sscBatch?: number | null
+            address?: string | null
+            dob?: Date | null
+            gender?: Gender | null
+            currentInstitute?: string | null
+            currentClass?: Class | null
+            roll?: string | null
+            guardianName?: string | null
+            guardianPhone?: string | null
+            guardianOccupation?: string | null
+
+            // Teacher-specific properties
+            teacherId?: string
+            specialization?: string | null
+            experience?: number | null
+
+            // Admin-specific properties
+            adminId?: string
         } & DefaultSession["user"]
     }
 
@@ -30,21 +39,8 @@ declare module "next-auth" {
      */
     interface User {
         id: string
-        name: string
-        email: string
-        phone: string
-        address: string
-        dob: Date | null
-        gender: string
-        currentInstitute: string
-        role: string
-        // Student-specific properties (only available when role is not TEACHER)
-        roll?: string
-        sscBatch?: string
-        currentClass?: string
-        guardianName?: string
-        guardianPhone?: string
-        guardianOccupation?: string
+        role: Role
+        phone?: string | null
     }
 }
 
@@ -52,20 +48,6 @@ declare module "next-auth/jwt" {
     /** Extend the built-in JWT types */
     interface JWT {
         id: string
-        name: string
-        email: string
-        phone: string
-        address: string
-        dob: Date | null
-        gender: string
-        currentInstitute: string
-        role: string
-        // Student-specific properties (only available when role is not TEACHER)
-        roll?: string
-        sscBatch?: string
-        currentClass?: string
-        guardianName?: string
-        guardianPhone?: string
-        guardianOccupation?: string
+        role: Role
     }
 }

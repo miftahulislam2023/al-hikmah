@@ -1,4 +1,4 @@
-import { updateStudentProfile } from "@/actions/student";
+import { updateStudentProfile } from "@/actions/user";
 import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

@@ -31,7 +31,7 @@ export default async function ViewCourses() {
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="font-medium text-gray-600">Fee:</span>
-                                        <span>৳ {course.fee}</span>
+                                        <span>৳ {course.price}</span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="font-medium text-gray-600">Status:</span>

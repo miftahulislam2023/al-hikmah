@@ -15,7 +15,7 @@ export default async function StudentLayout({
     children: React.ReactNode;
 }>) {
     const session = await auth()
-    const isUser = session?.user.role === "USER";
+    const isUser = session?.user.role === "STUDENT";
 
     return isUser ? (
         <main className={poppins.className}>

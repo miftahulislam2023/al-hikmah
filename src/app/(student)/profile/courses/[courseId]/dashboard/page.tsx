@@ -1,12 +1,11 @@
 import prisma from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDate } from "@/lib/utils";
-import { Lecture } from "@/lib/types";
 
 export default async function Dashboard({ params }: { params: { courseId: string } }) {
     const { courseId } = await params;
     const course = await prisma.course.findUnique({
-        where: { id: parseInt(courseId) },
+        where: { id: courseId },
         include: { lectures: true },
     });
 
@@ -22,7 +21,7 @@ export default async function Dashboard({ params }: { params: { courseId: string
                 <CardContent>
                     {course?.lectures && course.lectures.length > 0 ? (
                         <ul className="space-y-4">
-                            {course.lectures.map((lecture: Lecture) => (
+                            {course.lectures.map((lecture) => (
                                 <li key={lecture.id} className="border rounded p-4">
                                     <div className="font-semibold text-lg">{lecture.title}</div>
                                     <div className="text-gray-600 mb-2">{lecture.description}</div>

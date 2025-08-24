@@ -5,57 +5,53 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useActionState } from "react";
-import { useFormStatus } from "react-dom";
 import { SessionProvider } from "next-auth/react";
 import Link from "next/link";
-import { signUpStudentAction } from "@/actions/student";
-import { useEffect } from "react";
+import { signUpStudent } from "@/actions/auth";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-// Submit button with loading state using useFormStatus
-function SubmitButton() {
-    const { pending } = useFormStatus();
-
-    return (
-        <Button type="submit" className="w-full" disabled={pending}>
-            {pending ? "Creating account..." : "Create account"}
-        </Button>
-    );
+interface FormState {
+    error: string;
+    success: boolean;
+    pending: boolean;
 }
+
+// Submit button with loading state using useFormStatus
 
 function SignUpContent() {
     const router = useRouter();
-    const [state, formAction] = useActionState(signUpStudentAction, {
+    const [state, setState] = useState<FormState>({
         error: "",
         success: false,
-        values: {
-            name: "",
-            email: "",
-            phone: "",
-            address: "",
-            dob: "",
-            gender: "",
-            currentInstitute: "",
-            currentClass: "",
-            sscBatch: "",
-            guardianName: "",
-            guardianPhone: "",
-            guardianOccupation: "",
-        }
+        pending: false
     });
 
     // Redirect to signin page after successful registration
     useEffect(() => {
         if (state.success) {
-            // Delay redirect slightly to show success message
             const timeout = setTimeout(() => {
                 router.push('/signin');
             }, 2000);
-
             return () => clearTimeout(timeout);
         }
     }, [state.success, router]);
+
+    const handleSubmit = async (formData: FormData) => {
+        setState({ error: "", success: false, pending: true });
+
+        try {
+            const result = await signUpStudent(formData);
+
+            if (result.error) {
+                setState({ error: result.error, success: false, pending: false });
+            } else {
+                setState({ error: "", success: true, pending: false });
+            }
+        } catch {
+            setState({ error: "An unexpected error occurred", success: false, pending: false });
+        }
+    };
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-white to-[#fd2d61]/10 p-4">
@@ -72,7 +68,7 @@ function SignUpContent() {
                             Account created successfully! Redirecting to sign in page...
                         </div>
                     ) : (
-                        <form action={formAction} className="space-y-4">
+                        <form action={handleSubmit} className="space-y-4">
                             {state.error && (
                                 <div className="p-3 bg-[#fd2d61]/10 border border-[#fd2d61] text-[#fd2d61] rounded">
                                     {state.error}
@@ -80,12 +76,12 @@ function SignUpContent() {
                             )}<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {/* Basic Information */}                                <div className="space-y-2">
                                     <Label htmlFor="name">Full Name</Label>
-                                    <Input id="name" name="name" placeholder="Full Name" required defaultValue={state.values?.name || ""} />
+                                    <Input id="name" name="name" placeholder="Full Name" required />
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="email">Email</Label>
-                                    <Input id="email" type="email" name="email" placeholder="your.email@example.com" required defaultValue={state.values?.email || ""} />
+                                    <Input id="email" type="email" name="email" placeholder="your.email@example.com" required />
                                 </div>
 
                                 <div className="space-y-2">
@@ -95,22 +91,22 @@ function SignUpContent() {
 
                                 <div className="space-y-2">
                                     <Label htmlFor="phone">Phone Number</Label>
-                                    <Input id="phone" name="phone" type="number" placeholder="Phone Number" required defaultValue={state.values?.phone || ""} />
+                                    <Input id="phone" name="phone" type="number" placeholder="Phone Number" required />
                                 </div>
 
                                 <div className="space-y-2 md:col-span-2">
                                     <Label htmlFor="address">Address</Label>
-                                    <Input id="address" name="address" placeholder="Address" required defaultValue={state.values?.address || ""} />
+                                    <Input id="address" name="address" placeholder="Address" required />
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="dob">Date of Birth</Label>
-                                    <Input id="dob" type="date" name="dob" required defaultValue={state.values?.dob || ""} />
+                                    <Input id="dob" type="date" name="dob" required />
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="gender">Gender</Label>
-                                    <Select name="gender" defaultValue={state.values?.gender || ""} required>
+                                    <Select name="gender" required>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select gender" />
                                         </SelectTrigger>
@@ -124,12 +120,12 @@ function SignUpContent() {
                                 {/* Educational Information */}
                                 <div className="space-y-2">
                                     <Label htmlFor="currentInstitute">Current Institute</Label>
-                                    <Input id="currentInstitute" name="currentInstitute" placeholder="Current Institute" required defaultValue={state.values?.currentInstitute || ""} />
+                                    <Input id="currentInstitute" name="currentInstitute" placeholder="Current Institute" required />
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="currentClass">Current Class</Label>
-                                    <Select name="currentClass" defaultValue={state.values?.currentClass || ""} required>
+                                    <Select name="currentClass" required>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select class" />
                                         </SelectTrigger>
@@ -148,25 +144,27 @@ function SignUpContent() {
 
                                 <div className="space-y-2">
                                     <Label>SSC Batch</Label>
-                                    <Input id="sscBatch" type="number" name="sscBatch" placeholder="Enter SSC batch year (e.g., 22)" required defaultValue={state.values?.sscBatch || ""} />
+                                    <Input id="sscBatch" type="number" name="sscBatch" placeholder="Enter SSC batch year (e.g., 22)" required />
                                 </div>
 
                                 {/* Guardian Information */}
                                 <div className="space-y-2">
                                     <Label htmlFor="guardianName">Guardian Name</Label>
-                                    <Input id="guardianName" name="guardianName" placeholder="Guardian Name" required defaultValue={state.values?.guardianName || ""} />
+                                    <Input id="guardianName" name="guardianName" placeholder="Guardian Name" required />
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="guardianPhone">Guardian Phone</Label>
-                                    <Input id="guardianPhone" name="guardianPhone" type="number" placeholder="Guardian Phone" required defaultValue={state.values?.guardianPhone || ""} />
+                                    <Input id="guardianPhone" name="guardianPhone" type="number" placeholder="Guardian Phone" required />
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="guardianOccupation">Guardian Occupation</Label>
-                                    <Input id="guardianOccupation" name="guardianOccupation" placeholder="Guardian Occupation" required defaultValue={state.values?.guardianOccupation || ""} />
+                                    <Input id="guardianOccupation" name="guardianOccupation" placeholder="Guardian Occupation" required />
                                 </div>
-                            </div>                        <SubmitButton />
+                            </div>                        <Button type="submit" className="w-full" disabled={state.pending}>
+                                {state.pending ? "Creating account..." : "Create account"}
+                            </Button>
                         </form>
                     )}
                 </CardContent>

@@ -7,6 +7,10 @@ import Form from "next/form";
 import { createCourse } from "@/actions/course";
 
 export default function CreateCourse() {
+    const handleCreateCourse = async (formData: FormData) => {
+        "use server";
+        await createCourse(formData);
+    };
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -15,7 +19,7 @@ export default function CreateCourse() {
                     <CardTitle className="text-center">Create Course</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <Form action={createCourse} className="space-y-4">
+                    <Form action={handleCreateCourse} className="space-y-4">
                         <Label>Semester</Label>
                         <Select name="semester">
                             <SelectTrigger>
